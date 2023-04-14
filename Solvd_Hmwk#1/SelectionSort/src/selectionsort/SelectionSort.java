@@ -5,8 +5,8 @@
  */
 package selectionsort;
 
-//import java.util.Random;
-//import java.util.Scanner;
+import java.util.Random;
+import java.util.Scanner;
 
 /**
  * Find the lowest value in the array then
@@ -25,24 +25,25 @@ public class SelectionSort {
         //skip the last index as it will be the highest value.
         for (int i = 0; i < arrlen-1; i++){
             //element at the index is currently considered the smallest value
-            int index_min = i;
+            int indexMin = i;
             //check all elements after current element
             for (int j = i+1; j < arrlen; j++){
-                if (array[j] < array[index_min])
-                    index_min = j; //newest smallest element
+                if (array[j] < array[indexMin]) {
+                    indexMin = j; //newest smallest element
+                }
             }
             
             //swap minimum element with that at the current index
             //assuming the current element is not the smallest among those left.
             //store in temporary variable.
-            int temp_index = array[index_min];
-            array[index_min] = array[i];
-            array[i] = temp_index;
+            int tempIndex = array[indexMin];
+            array[indexMin] = array[i];
+            array[i] = tempIndex;
         }
     }
     
     public static void main(String[] args) {
-        /*Scanner obj = new Scanner(System.in);  // Create a Scanner object for input
+        Scanner obj = new Scanner(System.in);  // Create a Scanner object for input
         
         Random rand = new Random();
         
@@ -53,9 +54,10 @@ public class SelectionSort {
         int[] array = new int[num_elements];
         
         //create array of random numbers
-        for(int i = 0; i < num_elements; i++)
-            array[i] = rand.nextInt(101);*/
-        int[] array = {20, 57, 49, 100, 76, 79, 55, 22, 92, 34, 63, 80};
+        for(int i = 0; i < num_elements; i++) {
+            array[i] = rand.nextInt(101);
+        }
+        //int[] array = {20, 57, 49, 100, 76, 79, 55, 22, 92, 34, 63, 80};
         int len = array.length;
         
         long START = System.nanoTime();    //Store starting time
@@ -66,8 +68,9 @@ public class SelectionSort {
         System.out.println("Time taken : " + ((END - START) / 1000_000f) + " seconds");
         System.out.println();
         
-        for(int i = 0; i < len; i++)
+        for(int i = 0; i < len; i++) {
                 System.out.print(array[i] + " ");
+        }
         System.out.println();
     }
     
