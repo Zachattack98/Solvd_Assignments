@@ -5,6 +5,9 @@
  */
 package selectionsort;
 
+//import java.util.Random;
+//import java.util.Scanner;
+
 /**
  * Find the lowest value in the array then
  * swap it with the first element then
@@ -13,7 +16,7 @@ package selectionsort;
  */
 public class SelectionSort {
 
-    void sort(int array[]){
+    static void sort(int array[]){
         //get length of array
         int arrlen = array.length;
         
@@ -39,13 +42,32 @@ public class SelectionSort {
     }
     
     public static void main(String[] args) {
-        SelectionSort obj = new SelectionSort(); //create an object
-        int arr[] = {40, 20, 30, 50, 10};
-        obj.sort(arr); //call sort function from class
-        //print each element of the now sorted array
-        for (int i = 0; i < arr.length; i++) {
-            System.out.print(arr[i] + " ");
-        }
+        /*Scanner obj = new Scanner(System.in);  // Create a Scanner object for input
+        
+        Random rand = new Random();
+        
+        System.out.println("Number of elements : ");
+        int num_elements = obj.nextInt();
+        System.out.println();
+        
+        int[] array = new int[num_elements];
+        
+        //create array of random numbers
+        for(int i = 0; i < num_elements; i++)
+            array[i] = rand.nextInt(101);*/
+        int[] array = {20, 57, 49, 100, 76, 79, 55, 22, 92, 34, 63, 80};
+        int len = array.length;
+        
+        long START = System.nanoTime();    //Store starting time
+        
+        sort(array);
+        
+        long END = System.nanoTime();
+        System.out.println("Time taken : " + ((END - START) / 1000_000f) + " seconds");
+        System.out.println();
+        
+        for(int i = 0; i < len; i++)
+                System.out.print(array[i] + " ");
         System.out.println();
     }
     
