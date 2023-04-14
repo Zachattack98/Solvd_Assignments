@@ -1,5 +1,8 @@
 package quicksort;
 
+//import java.util.Random;
+//import java.util.Scanner;  // Import the Scanner class
+
 /**
  * Select element at highest index then place in correct position
  * in between lower and higher values then divide/partition array into
@@ -55,14 +58,32 @@ public class QuickSort {
     }
     
     public static void main(String[] args) {
-        int[] array = { 65, 41, 33, 20, 57, 49};
+        /*Scanner obj = new Scanner(System.in);  // Create a Scanner object for input
+        
+        Random rand = new Random();
+        
+        System.out.println("Number of elements : ");
+        int num_elements = obj.nextInt();
+        System.out.println();
+        
+        int[] array = new int[num_elements];
+        
+        //create array of random numbers
+        for(int i = 0; i < num_elements; i++)
+            array[i] = rand.nextInt(101);*/
+        int[] array = {20, 57, 49, 100, 76, 79, 55, 22, 92, 34, 63, 80};
         int len = array.length;
+        
+        long START = System.nanoTime();    //Store starting time
         
         Qsort(array, 0, len-1);
         
+        long END = System.nanoTime();
+        System.out.println("Time taken : " + ((END - START) / 1000_000f) + " seconds");
+        System.out.println();
+        
         for(int i = 0; i < len; i++)
                 System.out.print(array[i] + " ");
-        
         System.out.println();
     }
     
