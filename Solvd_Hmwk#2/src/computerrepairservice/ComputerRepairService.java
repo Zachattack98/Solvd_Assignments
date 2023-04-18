@@ -25,6 +25,7 @@ public class ComputerRepairService {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("Does your computer turn on?");
         String response = myObj.nextLine();
+        //Error: while loop continues even after inputting Yes or No
         while(!response.equals("Yes") || !response.equals("No")) {
             System.out.println("Does your computer turn on?");
             response = myObj.nextLine();
@@ -139,5 +140,4 @@ public class ComputerRepairService {
         System.out.println("Total cost for repairs: $" + cost.total);
         System.out.println();
     }
-
 }
