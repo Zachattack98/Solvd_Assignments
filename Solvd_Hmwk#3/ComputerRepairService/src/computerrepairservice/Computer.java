@@ -2,11 +2,14 @@ package computerrepairservice;
 
 //import java.util.Properties;
 
+import java.util.Scanner;
+
+
 public class Computer {
-    private double weight;
+    protected double weight;
     private int ramSize;
     private int diskSize;
-    protected String power;
+    public String power;
     
     public int getRamSize() {
         return ramSize;
@@ -49,14 +52,17 @@ public class Computer {
         }
     }
     
-    public void isWorking(String power) {
-        if(power.equals("Yes")) {
-            System.out.println("Your computer works just fine, thanks for stopping by!");
+    public void powerOnOff() {
+        System.out.println("Does your computer turn on?");
+        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+        power = myObj.nextLine();
+        while(!power.equals("Yes") || !power.equals("No")) {
+            System.out.println("Invalid input! Please type answer again.");
+            power = myObj.nextLine();
             System.out.println();
         }
-        else if(power.equals("No")) {
-            System.out.println("Do you want me to take closer at where the problem lies?");
-        }
+        System.out.println();
+
     }
     
     /*@Override public boolean equals(Object o) {

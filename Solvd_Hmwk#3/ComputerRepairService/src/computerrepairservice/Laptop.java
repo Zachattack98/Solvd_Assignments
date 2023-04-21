@@ -18,27 +18,19 @@ public class Laptop extends Computer {
         this.ldecision = ldecision;
     }
     
-    public void lcharging (String ldecision) {
+    public void lcharging () {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         
-        if(power.equals("No")) {
-            while(!ldecision.equals("Yes") || !ldecision.equals("No")) {
-                System.out.println("Invalid input! Try again.");
-                ldecision = myObj.nextLine();
-                System.out.println();
-            }
+        if(weight < 5.0){
+            System.out.println("Do you want me to take a closer look?");
+            ldecision = myObj.nextLine();
             if(ldecision.equals("Yes")) {
                 System.out.println("Great, I'll proceed with the Diagnosis!");
                 System.out.println();
             }
             else if(ldecision.equals("No")) {
-                System.out.println("Sorry, I cannot help you then!");
-                System.out.println();
+                System.out.println("Alright, thanks for stopping by!");
             }
-        }
-        else {
-            System.out.println("Great, I'll proceed with the Diagnosis!");
-            System.out.println();
         }
     }
 }

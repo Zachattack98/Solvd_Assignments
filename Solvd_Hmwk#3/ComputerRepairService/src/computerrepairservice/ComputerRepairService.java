@@ -20,38 +20,17 @@ public class ComputerRepairService {
         comp.setRamSize(16); //GB
         comp.setWeight(4.3); //lbs
         
-        System.out.println("Does your computer turn on?");
-        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        String response = myObj.nextLine();
-        while(!response.equals("Yes") || !response.equals("No")) {
-            System.out.println("Invalid input! Please type answer again.");
-            response = myObj.nextLine();
-            System.out.println();
-        }
-        System.out.println();
-        
-        comp.isWorking(response);
-                
-        if(comp.getWeight() < 5.0){ //Laptop
-            Laptop lap = new Laptop();
-            lap.setLdecision(myObj.nextLine());
-            System.out.println();
-            
-            lap.lcharging(lap.getLdecision());
-        }
-        else if(comp.getWeight() >= 5.0 && comp.getWeight() <= 10.0){ //Home Computer
-            HomeCom home = new HomeCom();
-            home.setHdecision(myObj.nextLine());
-            System.out.println();
-            
-           home.hpower(home.getHdecision());
-        }
-        System.out.println();
+        comp.powerOnOff();
+         
+        Laptop lap = new Laptop();
+        lap.lcharging();
+        HomeCom home = new HomeCom();
+        home.hpower();
             
         TotalCost cost = new TotalCost();
         int total = cost.total;
             
-        if(response.equals("Yes")) {
+        if(comp.power.equals("Yes")) {
             int tempstat = 0;
             Diagnostic diag = new Diagnostic();
 
