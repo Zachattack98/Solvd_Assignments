@@ -2,13 +2,17 @@ package computerrepairservice;
 
 //import java.util.Properties;
 
-public class Diagnostic {
-    public int numComponents;
-    public int status; //0 == good; 1 == repair; 2 == replace
+interface NumberComponent {
+    //total number of components
+    public final static int NUM_COMPONENTS = 5;
+}
+
+public class Diagnostic implements NumberComponent{
+    protected int status; //0 == good; 1 == repair; 2 == replace
     protected double time; //number of days the repairs will take
     
-    public Diagnostic(int numComponents) {
-        this.numComponents = numComponents;
+    public Diagnostic(double time) {
+        this.time = time;
     }
     
     public Diagnostic() {}
@@ -32,6 +36,6 @@ public class Diagnostic {
     }
     
     @Override public String toString() {
-        return("Total number of different components that will be analyzed: " + numComponents);
+        return("Total number of different components that will be analyzed: " + NUM_COMPONENTS);
     }
 }

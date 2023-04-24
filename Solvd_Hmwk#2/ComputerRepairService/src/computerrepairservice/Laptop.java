@@ -3,7 +3,7 @@ package computerrepairservice;
 //import java.util.Properties;
 import java.util.Scanner;
 
-public class Laptop extends Computer {
+public class Laptop extends Computer implements initDiagnosis {
     private String ldecision;
     
     public String getLdecision() {
@@ -23,7 +23,7 @@ public class Laptop extends Computer {
         this.ldecision = ldecision;
     }
     
-    public void lcharging () {
+    @Override public void proceed() {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         
         //if it is a laptop and powers on, ask customer if you can proceed with diagnosis

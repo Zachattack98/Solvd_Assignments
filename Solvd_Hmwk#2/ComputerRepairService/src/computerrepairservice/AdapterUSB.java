@@ -52,10 +52,17 @@ public class AdapterUSB extends Component {
         if(statusofComponent() == 2) {
             price *= 2; //double the price if the cooling fan needs to be replaced
         }
+        else if (statusofComponent() == 3) {
+            price = 0; //no cost for a part that still works
+        }
     }
     
     @Override public int calculatePrice() {
         adapterPrice();
+        return price;
+    }
+    
+    public int printPrice() {
         return price;
     }
 }

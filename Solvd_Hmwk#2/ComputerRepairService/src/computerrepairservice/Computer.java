@@ -4,12 +4,25 @@ package computerrepairservice;
 
 import java.util.Scanner;
 
-public class Computer {
+//verify the basics of the computer: GB storage and power
+interface initVerify {
+    //determine if computer initially turns on 
+    public void powerOnOff();
+    //print the type of computer and data storage
+    public void printComputerInfo();
+}
+
+interface initDiagnosis extends initVerify {
+    //proceed with diagnosis if power is off
+    public void proceed();
+}
+
+public class Computer implements initVerify {
     protected double weight;
     private int ramSize;
     private int diskSize;
     //possible to use PowerUnit in place of String to call propeties from PowerUnit class
-    protected String power;
+    public String power;
     
     public int getRamSize() {
         return ramSize;
@@ -37,7 +50,7 @@ public class Computer {
     //classes with the one variable in the parameter
     public Computer() {}
     
-    public void printComputerInfo() {
+    @Override public void printComputerInfo() {
         if(weight < 5.0) {
             System.out.println("Your Laptop contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.");
         }
@@ -50,7 +63,7 @@ public class Computer {
     }
     
     //ask if the computer initially powers on
-    public void powerOnOff() {
+    @Override public void powerOnOff() {
         System.out.println("Does your computer turn on?");
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         power = myObj.nextLine();
