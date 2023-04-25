@@ -4,12 +4,12 @@ package computerrepairservice;
 
 interface NumberComponent {
     //total number of components
-    public final static int NUM_COMPONENTS = 5;
+    public static int NUM_COMPONENTS = 5;
 }
 
 public class Diagnostic implements NumberComponent{
-    protected int status; //0 == good; 1 == repair; 2 == replace
-    protected double time; //number of days the repairs will take
+    public int status; //0 == good; 1 == repair; 2 == replace
+    public double time; //number of days the repairs will take
     
     public Diagnostic(double time) {
         this.time = time;
@@ -21,11 +21,11 @@ public class Diagnostic implements NumberComponent{
         switch(status) {
             case(1):
                 System.out.println(component + " needs to be repaired.");
-                time += 0.5;
+                time = 0.5;
                 break;
             case(2):
                 System.out.println(component + " needs to be replaced.");
-                time += 1.0; //let's say each item adds a day to the shipping
+                time = 1.0; //let's say each item adds a day to the shipping
                 break;
             case(3):
                 System.out.println(component + " is working just fine.");

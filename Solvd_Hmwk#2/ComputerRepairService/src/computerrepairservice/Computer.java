@@ -7,12 +7,13 @@ import java.util.Scanner;
 //verify the basics of the computer: GB storage and power
 interface initVerify {
     //determine if computer initially turns on 
-    public void powerOnOff();
+    //public void powerOnOff();
+    
     //print the type of computer and data storage
     public void printComputerInfo();
 }
 
-interface initDiagnosis extends initVerify {
+interface initDiagnosis {
     //proceed with diagnosis if power is off
     public void proceed();
 }
@@ -62,8 +63,9 @@ public class Computer implements initVerify {
         }
     }
     
-    //ask if the computer initially powers on
-    @Override public void powerOnOff() {
+    //ask if the computer initially powers on.
+    //should only be initialized in superclass.
+    final void powerOnOff() {
         System.out.println("Does your computer turn on?");
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         power = myObj.nextLine();
@@ -75,18 +77,4 @@ public class Computer implements initVerify {
         System.out.println();
 
     }
-    
-    /*@Override public boolean equals(Object o) {
-    
-        if (o == this) {
-            return true;
-        }
-        if (!(o instanceof Shop)) {
-            return false;
-        }
-             
-        Computer c = (Computer) o;
-        
-        return power.equals(c.power);
-    }*/
 }

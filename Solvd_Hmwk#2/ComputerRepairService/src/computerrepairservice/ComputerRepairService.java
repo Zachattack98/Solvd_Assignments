@@ -2,46 +2,61 @@ package computerrepairservice;
 
 public class ComputerRepairService {
 
+    public static int testNumber = 0;
+    //print which diagnosis you are performing out of the total.
+    //must be declared inside same class to call without object.
+    public static void printTestNumber() {
+        testNumber++;
+        System.out.println("Diagnosis Test #" + testNumber + ":");
+    }
+    
     public static void main(String[] args) {
         ServiceShop techShop = new ServiceShop("Gyro Tech Computer Repair Service", "Irvine, CA");
         System.out.println(techShop.toString());
         System.out.println();
         
         Computer comp = new Computer(4.3, 16, 4);
-        comp.powerOnOff();
+        comp.printComputerInfo();
+        System.out.println();
+        //Error: Yes, No, and everything ele keep turning out invalid
+        //comp.powerOnOff();
         
-        if(comp.power.equals("No")) {
-            Laptop lap = new Laptop("Yes");
-            lap.proceed();
-            HomeCom home = new HomeCom("Yes");
-            home.proceed();
+        //if(comp.power.equals("No")) {
+            //Laptop lap = new Laptop("Yes");
+            //lap.proceed();
+            //HomeCom home = new HomeCom("Yes");
+            //home.proceed();
             
-            Diagnostic diag = new Diagnostic(0.0); //start working time at zero
-            diag.toString();
+            Diagnostic diag = new Diagnostic(0.0);
+            System.out.println(diag.toString());
         
             Screen screen = new Screen("LCD Screen", 34.7, 36);
             HardDrive hd = new HardDrive("Hard Drive", 87.4, 20);
-            AdapterUSB adapt = new AdapterUSB("USB Adapter(s)", 12.9, 1);
-            PowerUnit punit = new PowerUnit("Power Supply Unit", 65.1, 70);
-            Fan fan = new Fan("Cooling Fan", 95.0, 25);
-            Component[] components = {screen, hd, adapt, punit, fan};
+            AdapterUSB adapt = new AdapterUSB("USB Adapter(s)", 6.2, 1);
+            PowerUnit punit = new PowerUnit("Power Supply Unit", 1.9, 70);
+            Fan fan = new Fan("Cooling Fan", 54.0, 25);
+            Component[] components = {screen, hd, adapt, punit, fan}; //combine all objects together into a new array
         
-            int total = 0;
+            int totalCost = 0;
+            //double totalTime = 0.0;
             //use for-each loop to implement calculatePrice() method in each sub class of Component()
             for(Component component: components) {
-                total += component.calculatePrice();
-                component.toString();
+                printTestNumber();
+                totalCost += component.calculatePrice();
+                //totalTime += diag.time;
+                System.out.println(component.toString());
                 System.out.println();
             }
         
-            //output overall cost and time it will take
-            System.out.println("Total cost for repairs: $" + total + " and will take " + diag.time + " days to finish!");
+            //output overall cost and time it will take.
+            //Error: time keeps reseting to 0.0, but does assign in the switch case in result()
+            System.out.println("Total cost for repairs: $" + totalCost + ", and will take " + diag.time + " days to finish!");
             System.out.println();
-        }
-        else {
+        //}
+        /*else {
             System.out.println("Alright, thanks for stopping by!");
             System.out.println();
-        }
+        }*/
     }
 
 }

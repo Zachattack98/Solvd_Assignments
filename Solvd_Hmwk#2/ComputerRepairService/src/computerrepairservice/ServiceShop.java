@@ -1,8 +1,9 @@
 package computerrepairservice;
 
 //import java.util.Properties;
-        
-public class ServiceShop {
+ 
+//cannot be overriden/modified by any subclasses
+final class ServiceShop {
     private String name;
     private String location;
     
@@ -27,7 +28,12 @@ public class ServiceShop {
         this.location = location;
     }
     
+    //static block, called before program even runs
+    static {
+        System.out.println("Welcome to our Computer Repair shop fine customer!!");
+    }
+    
     @Override public String toString() {
-        return("Hello, welcome to " + name + ", the best repair services in " + location + "!");
+        return("Here at " + name + ", we offer the best computer repair service in " + location + "!");
     }
 }
