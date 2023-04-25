@@ -19,7 +19,7 @@ public class Screen extends Component {
     }
     
     @Override public int statusofComponent() {
-        if(damage <= 11.0 && damage <= 53.0) {
+        if(damage >= 11.0 && damage <= 53.0) {
             return STATUS_REPAIR;
         }
         else if(damage > 53.0) {
@@ -46,19 +46,15 @@ public class Screen extends Component {
         }
         
         if(statusofComponent() == 2) {
-            price *= 2; //double the price if the cooling fan needs to be replaced
+            price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
         }
         else if (statusofComponent() == 3) {
-            price = 0; //no cost for a part that still works
+            price = zeroPrice; //no cost for a part that still works
         }
     }
     
     @Override public int calculatePrice() {
         screenPrice();
-        return price;
-    }
-    
-    public int printPrice() {
         return price;
     }
     

@@ -19,7 +19,7 @@ public class AdapterUSB extends Component {
     }
     
     @Override public int statusofComponent() {
-        if(damage <= 9.0 && damage <= 57.0) {
+        if(damage >= 9.0 && damage <= 57.0) {
             return STATUS_REPAIR;
         }
         else if(damage > 57.0) {
@@ -50,10 +50,10 @@ public class AdapterUSB extends Component {
         }
         
         if(statusofComponent() == 2) {
-            price *= 2; //double the price if the cooling fan needs to be replaced
+            price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
         }
         else if (statusofComponent() == 3) {
-            price = 0; //no cost for a part that still works
+            price = zeroPrice; //no cost for a part that still works
         }
     }
     
@@ -61,8 +61,5 @@ public class AdapterUSB extends Component {
         adapterPrice();
         return price;
     }
-    
-    public int printPrice() {
-        return price;
-    }
+
 }

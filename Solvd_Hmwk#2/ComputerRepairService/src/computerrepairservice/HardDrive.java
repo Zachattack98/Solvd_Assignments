@@ -19,7 +19,7 @@ public class HardDrive extends Component {
     }
     
     @Override public int statusofComponent() {
-        if(damage <= 4.0 && damage <= 41.0) {
+        if(damage >= 4.0 && damage <= 41.0) {
             return STATUS_REPAIR;
         }
         else if(damage > 41.0) {
@@ -46,10 +46,10 @@ public class HardDrive extends Component {
         }
         
         if(statusofComponent() == 2) {
-            price *= 2; //double the price if the cooling fan needs to be replaced
+            price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
         }
         else if (statusofComponent() == 3) {
-            price = 0; //no cost for a part that still works
+            price = zeroPrice; //no cost for a part that still works
         }
     }
     
@@ -58,7 +58,4 @@ public class HardDrive extends Component {
         return price;
     }
     
-    public int printPrice() {
-        return price;
-    }
 }

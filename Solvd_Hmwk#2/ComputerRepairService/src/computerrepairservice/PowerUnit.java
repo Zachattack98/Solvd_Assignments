@@ -19,7 +19,7 @@ public class PowerUnit extends Component {
     }
 
     @Override public int statusofComponent() {
-        if(damage <= 2.0 && damage <= 37.0) {
+        if(damage >= 2.0 && damage <= 37.0) {
             return STATUS_REPAIR;
         }
         else if(damage > 37.0) {
@@ -46,10 +46,10 @@ public class PowerUnit extends Component {
         }
         
         if(statusofComponent() == 2) {
-            price *= 2; //double the price if the power unit needs to be replaced
+            price *= priceMultiplier; //double the price if the power unit needs to be replaced
         }
         else if (statusofComponent() == 3) {
-            price = 0; //no cost for a part that still works
+            price = zeroPrice; //no cost for a part that still works
         }
     }
     
@@ -57,8 +57,5 @@ public class PowerUnit extends Component {
         powerunitPrice();
         return price;
     }
-    
-    public int printPrice() {
-        return price;
-    }
+
 }
