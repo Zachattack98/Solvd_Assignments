@@ -1,18 +1,33 @@
 package computerrepairservice;
 
 //import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
  
 //cannot be overriden/modified by any subclasses
 final class ServiceShop {
-    private String name;
+    private String nameShop;
     private String location;
     
-    public String getName() {
-        return name;
+    protected static final Logger SHOP_LOGGER = LogManager.getLogger();
+    private Logger logger = SHOP_LOGGER;
+
+    protected Logger getLogger() {
+        return logger;
+    }
+
+    protected void setLogger(Logger logger) {
+        this.logger = logger;
     }
     
-    public void setName(String name) {
-        this.name = name;
+    public String getNameShop() {
+        return nameShop;
+    }
+    
+    public void setNameShop(String nameShop) {
+        this.nameShop = nameShop;
     }
     
     public String getLocation() {
@@ -23,8 +38,8 @@ final class ServiceShop {
         this.location = location;
     }
     
-    public ServiceShop(String name, String location) {
-        this.name = name;
+    public ServiceShop(String nameShop, String location) {
+        this.nameShop = nameShop;
         this.location = location;
     }
     
@@ -34,6 +49,19 @@ final class ServiceShop {
     }
     
     @Override public String toString() {
-        return("Here at " + name + ", we offer the best computer repair service in " + location + "!");
+        return("Here at " + nameShop + ", we offer the best computer repair service in " + location + "!");
+    }
+    
+    public void validShop(){
+        //if the shop name is empty
+        if(nameShop.equals("")) {
+            try {
+                throw new ShopNotFoundException("Shop's name not found!");
+            }
+            catch(ShopNotFoundException e) {
+                logger.error(e.getMessage());
+                System.exit(1);
+            }
+        }
     }
 }

@@ -3,6 +3,8 @@ package computerrepairservice;
 //import java.util.Properties;
 
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 //verify the basics of the computer: GB storage and power
 interface initVerify {
@@ -24,6 +26,17 @@ public class Computer implements initVerify {
     private int diskSize;
     //possible to use PowerUnit in place of String to call propeties from PowerUnit class
     public String power;
+    
+    protected static final Logger COMPUTER_LOGGER = LogManager.getLogger();
+    private Logger logger = COMPUTER_LOGGER;
+
+    protected Logger getLogger() {
+        return logger;
+    }
+
+    protected void setLogger(Logger logger) {
+        this.logger = logger;
+    }
     
     public int getRamSize() {
         return ramSize;
@@ -76,5 +89,18 @@ public class Computer implements initVerify {
         }
         System.out.println();
 
+    }
+    
+    public void validComputer() {
+        //if no viable computer is empty
+        if(weight == 0.0 || (diskSize == 0 && ramSize == 0)) {
+            try {
+                throw new ComputerNotFoundException("No computer found to be diagnosed!");
+            }
+            catch(ComputerNotFoundException e) {
+                logger.error(e.getMessage());
+                System.exit(1);
+            }
+        }
     }
 }
