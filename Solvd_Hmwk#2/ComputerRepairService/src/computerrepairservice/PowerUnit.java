@@ -35,6 +35,7 @@ public class PowerUnit extends Component {
         Diagnostic diag = new Diagnostic();
         diag.result(nameComponent, statusofComponent());
         
+        time = 0.5; //default time for repairing any component; half a day
         if(wattage <= 30) {
             price = 25;
         }
@@ -46,10 +47,12 @@ public class PowerUnit extends Component {
         }
         
         if(statusofComponent() == 2) {
-            price *= priceMultiplier; //double the price if the power unit needs to be replaced
+            price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
+            time = 0.5; //time for replacing any component; one full day
         }
         else if (statusofComponent() == 3) {
             price = zeroPrice; //no cost for a part that still works
+            time = 0.0; //no time necessary for comonents that still work
         }
     }
     
@@ -58,4 +61,7 @@ public class PowerUnit extends Component {
         return price;
     }
 
+    @Override public double calculateTime() {
+        return time;
+    }
 }
