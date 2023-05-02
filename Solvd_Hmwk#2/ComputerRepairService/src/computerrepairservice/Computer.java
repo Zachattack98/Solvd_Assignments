@@ -6,21 +6,7 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-//verify the basics of the computer: GB storage and power
-interface initVerify {
-    //determine if computer initially turns on 
-    //public void powerOnOff();
-    
-    //print the type of computer and data storage
-    public void printComputerInfo();
-}
-
-interface initDiagnosis {
-    //proceed with diagnosis if power is off
-    public void proceed();
-}
-
-public class Computer implements initVerify {
+public class Computer extends Exceptions implements InitVerify {
     protected double weight;
     private int ramSize;
     private int diskSize;
@@ -53,11 +39,16 @@ public class Computer implements initVerify {
     public void setDiskSize(int diskSize) {
         this.diskSize = diskSize;
     }
-    
-    public Computer(double weight, int ramSize, int diskSize) {
-        this.weight = weight;
-        this.ramSize = ramSize;
-        this.diskSize = diskSize;
+
+    public Computer(double weight, int ramSize, int diskSize) throws ComputerNotFoundException {
+        //if no viable computer is empty
+        if(weight == 0.0 || (diskSize == 0 && ramSize == 0)) {
+            throw new ComputerNotFoundException("No computer found to be diagnosed!");
+        } else {
+            this.weight = weight;
+            this.ramSize = ramSize;
+            this.diskSize = diskSize;
+        }
     }
     
     //need default constructor to create constructors in HomeCom and Laptop
@@ -91,16 +82,8 @@ public class Computer implements initVerify {
 
     }
     
-    public void validComputer() {
-        //if no viable computer is empty
-        if(weight == 0.0 || (diskSize == 0 && ramSize == 0)) {
-            try {
-                throw new ComputerNotFoundException("No computer found to be diagnosed!");
-            }
-            catch(ComputerNotFoundException e) {
-                logger.error(e.getMessage());
-                System.exit(1);
-            }
-        }
-    }
+    /*public void validComputer() {
+        logger.error(e.getMessage());
+        System.exit(1);
+    }*/
 }

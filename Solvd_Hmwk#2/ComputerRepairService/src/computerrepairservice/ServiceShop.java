@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 
  
 //cannot be overriden/modified by any subclasses
-final class ServiceShop {
+final class ServiceShop extends Exceptions {
     private String nameShop;
     private String location;
     
@@ -38,8 +38,13 @@ final class ServiceShop {
         this.location = location;
     }
     
-    public ServiceShop(String nameShop, String location) {
-        this.nameShop = nameShop;
+    public ServiceShop(String nameShop, String location) throws ShopNotFoundException {
+        //if the shop name is empty
+        if(nameShop.equals("")) {
+            throw new ShopNotFoundException("Shop's name not found!");
+        } else {
+            this.nameShop = nameShop;
+        }
         this.location = location;
     }
     
@@ -52,16 +57,8 @@ final class ServiceShop {
         return("Here at " + nameShop + ", we offer the best computer repair service in " + location + "!");
     }
     
-    public void validShop(){
-        //if the shop name is empty
-        if(nameShop.equals("")) {
-            try {
-                throw new ShopNotFoundException("Shop's name not found!");
-            }
-            catch(ShopNotFoundException e) {
-                logger.error(e.getMessage());
-                System.exit(1);
-            }
-        }
-    }
+    /*public void validShop(){
+        logger.error(e.getMessage());
+        System.exit(1);
+    }*/
 }
