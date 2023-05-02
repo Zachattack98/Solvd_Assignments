@@ -5,8 +5,17 @@ package computerrepairservice;
 public class PowerUnit extends Component {
     private int wattage;
     
-    public PowerUnit(String nameComponent, double damage, int wattage) {
+    public PowerUnit(String nameComponent, double damage, int wattage) throws ComponentNotFoundException, DamageRangeInvalidException {
         super(nameComponent, damage);
+        
+        /*try {
+            AdapterUSB childPower = new AdapterUSB(nameComponent, damage, wattage);
+        }
+        catch (ComponentNotFoundException | DamageRangeInvalidException ce) { //multicatch
+            logger.error(ce.getMessage());
+            System.exit(1);
+        }*/
+        
         this.wattage = wattage;
     }
     
@@ -18,7 +27,8 @@ public class PowerUnit extends Component {
         this.wattage = wattage;
     }
 
-    @Override public int statusofComponent() {
+    @Override 
+    public int statusOfComponent() {
         if(damage >= 2.0 && damage <= 37.0) {
             return STATUS_REPAIR;
         }
@@ -30,10 +40,11 @@ public class PowerUnit extends Component {
         }
     }
 
-    public void powerunitPrice() {
+    @Override 
+    public int calculatePrice() {
         //output the diagnosis results of the power unit
         Diagnostic diag = new Diagnostic();
-        diag.result(nameComponent, statusofComponent());
+        diag.result(nameComponent, statusOfComponent());
         
         time = 0.5; //default time for repairing any component; half a day
         if(wattage <= 30) {
@@ -46,22 +57,19 @@ public class PowerUnit extends Component {
             price = 60;
         }
         
-        if(statusofComponent() == 2) {
+        if(statusOfComponent() == 2) {
             price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
             time = 0.5; //time for replacing any component; one full day
         }
-        else if (statusofComponent() == 3) {
+        else if (statusOfComponent() == 3) {
             price = zeroPrice; //no cost for a part that still works
             time = 0.0; //no time necessary for comonents that still work
         }
-    }
-    
-    @Override public int calculatePrice() {
-        powerunitPrice();
+        
+        //add up all individual prices determined in each subclass
+        price += price;
+        
         return price;
     }
 
-    @Override public double calculateTime() {
-        return time;
-    }
 }

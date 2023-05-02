@@ -2,11 +2,21 @@ package computerrepairservice;
 
 //import java.util.Properties;
 
+
 public class AdapterUSB extends Component {
     private int numAdapters;
     
-    public AdapterUSB(String nameComponent, double damage, int numAdapters) {
+    public AdapterUSB(String nameComponent, double damage, int numAdapters) throws ComponentNotFoundException, DamageRangeInvalidException {
         super(nameComponent, damage);
+        
+        /*try {
+            AdapterUSB childUSB = new AdapterUSB(nameComponent, damage, numAdapters);
+        }
+        catch (ComponentNotFoundException | DamageRangeInvalidException ce) { //multicatch
+            logger.error(ce.getMessage());
+            System.exit(1);
+        }*/
+        
         this.numAdapters = numAdapters;
     }
     
@@ -18,7 +28,9 @@ public class AdapterUSB extends Component {
         this.numAdapters = numAdapters;
     }
     
-    @Override public int statusofComponent() {
+    @Override 
+    public int statusOfComponent() {
+        
         if(damage >= 9.0 && damage <= 57.0) {
             return STATUS_REPAIR;
         }
@@ -30,10 +42,12 @@ public class AdapterUSB extends Component {
         }
     }
 
-    public void adapterPrice() {
+    
+    @Override 
+    public int calculatePrice() {
         //output the diagnosis results of the USB adapter(s)
         Diagnostic diag = new Diagnostic();
-        diag.result(nameComponent, statusofComponent());
+        diag.result(nameComponent, statusOfComponent());
         
         time = 0.5; //default time for repairing any component; half a day
         switch(numAdapters) {
@@ -50,23 +64,19 @@ public class AdapterUSB extends Component {
                 break;
         }
         
-        if(statusofComponent() == 2) {
+        if(statusOfComponent() == 2) {
             price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
             time = 0.5; //time for replacing any component; one full day
         }
-        else if (statusofComponent() == 3) {
+        else if (statusOfComponent() == 3) {
             price = zeroPrice; //no cost for a part that still works
             time = 0.0; //no time necessary for comonents that still work
         }
-    }
-    
-    @Override public int calculatePrice() {
-        adapterPrice();
+        
+        //add up all individual prices determined in each subclass
+        price += price;
+        
         return price;
-    }
-    
-    @Override public double calculateTime() {
-        return time;
     }
 
 }
