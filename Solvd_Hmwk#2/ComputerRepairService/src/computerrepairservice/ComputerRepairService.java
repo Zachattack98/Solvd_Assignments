@@ -1,17 +1,22 @@
 package computerrepairservice;
 
+import computerrepairservice.exception.ShopNotFoundException;
+import computerrepairservice.exception.ComputerNotFoundException;
+import computerrepairservice.exception.ComponentNotFoundException;
+import computerrepairservice.exception.DamageRangeInvalidException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class ComputerRepairService extends Exceptions {
+public class ComputerRepairService{
+    static Logger log = LogManager.getLogger(ComputerRepairService.class);
     
     public static void main(String[] args) {
-        Logger log = Logger.getLogger("Main");
         
         try {
             ServiceShop techShop = new ServiceShop("Gyro Tech Computer Repair Service", "Irvine, CA");
@@ -49,6 +54,7 @@ public class ComputerRepairService extends Exceptions {
             System.out.println();   
                     
             try {
+                //a set collection that contains no duplicates of component names: HashSet
                 Set<String> st = new HashSet<>();
                 
                 Screen screen = new Screen("LCD Screen", 34.7, 36);
@@ -62,7 +68,7 @@ public class ComputerRepairService extends Exceptions {
                 Fan fan = new Fan("Cooling Fan", 54.0, 25);
                 st.add(fan.nameComponent);
 
-                System.out.println("List of components that will be diagnosed: " + st);
+                log.info("List of components that will be diagnosed: " + st);
                 System.out.println();
                 
                 Component[] components = {screen, hd, adapt, punit, fan}; //combine all objects together into a new array
@@ -75,23 +81,29 @@ public class ComputerRepairService extends Exceptions {
                 double temptime = 0;
             
                 List<String> lst = new ArrayList<>();
-        
+    
                 //use for-each loop to implement calculatePrice() method in each sub class of Component()
                 for(Component component: components) {
                     //validate all conditions for components
                     component.log(marker);
                     //if no errors occurred, begin diagnosis
+                    component.determinePrice();
                     tempcost = component.calculatePrice();
+                    //now that we have the status, add it to the list
                     lst.add(Integer.toString(component.statusOfComponent()));
+                    component.determineTime();
                     temptime = component.calculateTime();
                     
+                    log.info(component.calculatePrice());
+                    log.info(component.calculateTime());
+                
                     diag.printTestNumber();
                     
                     component.recordDamage();
                     component.recordPrice();
                     component.recordTime();
                     
-                    System.out.println(component.toString());
+                    log.info(component.toString());
                     System.out.println();
                 }
                 
