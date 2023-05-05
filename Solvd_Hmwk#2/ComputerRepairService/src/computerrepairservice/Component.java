@@ -1,7 +1,11 @@
 package computerrepairservice;
 
-import java.util.*;
-
+import computerrepairservice.interfaces.ListComponent;
+import computerrepairservice.interfaces.NumberComponent;
+import computerrepairservice.exception.ComponentNotFoundException;
+import computerrepairservice.exception.DamageRangeInvalidException;
+import computerrepairservice.exception.PriceInvalidException;
+import computerrepairservice.linkedlist.LinkedListCustom;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -11,31 +15,32 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 
+interface Stat {
+    //unchangeable static variables for determing repair/replacement status
+    public final static int STATUS_REPAIR = 1;
+    public final static int STATUS_REPLACE = 2;
+    public final static int STATUS_WORKING = 3;
+}
 
-public abstract class Component extends Exceptions implements Stat, ListComponent {
+public abstract class Component implements Stat, ListComponent, NumberComponent {
     public String nameComponent; //component name
     protected double damage; //damage done to component
     protected int price; //price the component given its specifications
-    protected double time; //number of days the repairs will take
+    protected int[] price_array = new int[NUM_COMPONENTS]; //save all prices found in each subclass in this array
+    public double time; //number of days the repairs will take
+    public double[] time_array = new double[NUM_COMPONENTS]; //save all time intervals found in each subclass in this array
     protected static int priceMultiplier = 2; //for replacement only; multiply the assigned price
     protected static int zeroPrice = 0; //for working only; reassign price as no cost
     
     protected static final Logger COMPONENT_LOGGER = LogManager.getLogger();
-    //private Logger logger = COMPONENT_LOGGER;
     protected Logger logger = COMPONENT_LOGGER;
     
-    //a set collection that contains no duplicates of component names: LinkedList
-    //a collection for storing the time required to fix each component: SortedSet
-    //LinkedList<Integer> lst = new LinkedList<>();
-    //SortedSet<String> st2 = new TreeSet<>();
-    
-    //a collection for storing the amount of damage: Queue
-    //a collection for storing each individual price: Queue
-    //Queue<Double> que = new PriorityQueue<>();
-    
-    
-    //partition/group components by repair, replace, and working: Map
-    //Map<String, Integer> mp = new HashMap<>();
+    //a collection for storing the amount of damage: LinkedList
+    LinkedListCustom<Double> lst1 = new LinkedListCustom<>();
+    //a collection for storing each individual price: LinkedList
+    LinkedListCustom<Integer> lst2 = new LinkedListCustom<>();
+    //a collection for storing the time required to fix each component: LinkedList
+    LinkedListCustom<Double> lst3 = new LinkedListCustom<>();
     
     protected Logger getLogger() {
         return logger;
@@ -83,7 +88,7 @@ public abstract class Component extends Exceptions implements Stat, ListComponen
     
     @Override 
     public String toString() {
-        return ("Fixing the " + nameComponent + " will cost you $" + price + "and will take " + time + " days.");
+        return ("Fixing the " + nameComponent + " will cost you $" + price + " and will take " + time + " days.");
     }
     
     public void log(Marker marker) {
@@ -134,38 +139,46 @@ public abstract class Component extends Exceptions implements Stat, ListComponen
     public abstract int statusOfComponent();
     
     //return the price determined in each sub class which will then be added together
-    public abstract int calculatePrice();
+    public abstract int determinePrice();
     
     //return the number of days determined in each sub class which will then be added together
+    public abstract double determineTime();
+    
+    public int calculatePrice() {
+        int totalPrice = 0;
+        for(int i=0; i < NUM_COMPONENTS; i++) {
+            totalPrice += price_array[i];
+        }
+        return totalPrice;
+    }
+
     public double calculateTime() {
-        //add up all day counts determined in each subclass
-        time += time;
-        
-        return time;
+        double totalTime = 0;
+        for(int i=0; i < NUM_COMPONENTS; i++) {
+            totalTime += time_array[i];
+        }
+        return totalTime;
     }
     
     //save all damage amounts
     public void recordDamage() {
-        LinkedList<Double> lst1 = new LinkedList<>();
         lst1.add(damage);
-        
-        System.out.println("Current list of analyzed damage percentages: " + lst1);
+        System.out.print("Analysis damage(%): ");
+        lst1.printList();
     }
     
     //save all price estimates for each broken component
     public void recordPrice() {
-        LinkedList<Integer> lst2 = new LinkedList<>();
         lst2.add(price);
-        
-        System.out.println("Current list of estimated price values: " + lst2);
+        System.out.print("Estimated price values: ");
+        lst2.printList();
     }
     
     //save all time estimates it would take to fix each component
     public void recordTime() {
-        LinkedList<Double> lst3 = new LinkedList<>();
         lst3.add(time);
-        
-        System.out.println("Current list of estimated number of days: " + lst3);
+        System.out.print("Estimated number of days: ");
+        lst3.printList();
         System.out.println();
     }
 }
