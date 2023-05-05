@@ -1,13 +1,13 @@
 package computerrepairservice;
 
 //import java.util.Properties;
-
+import computerrepairservice.exception.ShopNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
  
 //cannot be overriden/modified by any subclasses
-final class ServiceShop extends Exceptions {
+final class ServiceShop {
     private String nameShop;
     private String location;
     

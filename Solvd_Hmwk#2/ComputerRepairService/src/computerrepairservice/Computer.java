@@ -1,12 +1,13 @@
 package computerrepairservice;
 
 //import java.util.Properties;
-
+import computerrepairservice.exception.ComputerNotFoundException;
+import computerrepairservice.interfaces.InitVerify;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class Computer extends Exceptions implements InitVerify {
+public class Computer implements InitVerify {
     protected double weight;
     private int ramSize;
     private int diskSize;

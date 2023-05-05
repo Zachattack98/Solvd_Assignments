@@ -2,8 +2,10 @@ package computerrepairservice;
 
 //import java.util.Properties;
 import java.util.Scanner;
+import computerrepairservice.exception.ComputerNotFoundException;
+import computerrepairservice.interfaces.InitDiagnosis;
 
-public class Laptop extends Computer implements initDiagnosis {
+public class Laptop extends Computer implements InitDiagnosis {
     private String ldecision;
     
     public String getLdecision() {
@@ -14,8 +16,15 @@ public class Laptop extends Computer implements initDiagnosis {
         this.ldecision = ldecision;
     }
     
-    public Laptop(double weight, int ramSize, int diskSize, String ldecision) {
-        super(weight, ramSize, diskSize);
+    public Laptop(double weight, int ramSize, int diskSize, String ldecision) throws ComputerNotFoundException {
+        super(weight, ramSize, diskSize); //must be first statement in constructor
+
+        //if no viable computer is empty
+        if(weight == 0.0 || (diskSize == 0 && ramSize == 0)) {
+            throw new ComputerNotFoundException("No computer found to be diagnosed!");
+        } else {
+            this.weight = weight;
+        }
         this.ldecision = ldecision;
     }
     
@@ -23,7 +32,8 @@ public class Laptop extends Computer implements initDiagnosis {
         this.ldecision = ldecision;
     }
     
-    @Override public void proceed() {
+    @Override 
+    public void proceed() {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         
         //if it is a laptop and powers on, ask customer if you can proceed with diagnosis

@@ -1,18 +1,19 @@
 package computerrepairservice;
 
 //import java.util.Properties;
-
+import computerrepairservice.interfaces.NumberComponent;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.List;
 
-//import static computerrepairservice.Component.testNumber;
-
 public class Diagnostic implements NumberComponent{
     public int status; //0 == good; 1 == repair; 2 == replace
     public static int testNumber = 0;
     
+    //partition/group components by repair, replace, and working: Map
+    Map<String, String> mp = new HashMap<>();
+        
     public Diagnostic(int status) {
         this.status = status;
     }
@@ -57,8 +58,6 @@ public class Diagnostic implements NumberComponent{
     }
     
     public void listOfStats(Set<String> s, List<String> l) {
-        Map<String, String> mp = new HashMap<>();
-        
         //convert both set and list to arrays
         String[] sarray = s.toArray(new String[s.size()]);
         String[] larray = l.toArray(new String[l.size()]);
@@ -82,7 +81,7 @@ public class Diagnostic implements NumberComponent{
         //traverse through Map using for-each loop
         for (Map.Entry<String, String> ma : mp.entrySet()) {
 
-            System.out.print(ma.getKey() + ":");
+            System.out.print(ma.getKey() + ": ");
             System.out.println(ma.getValue());
         }
         System.out.println();

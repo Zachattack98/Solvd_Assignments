@@ -1,6 +1,8 @@
 package computerrepairservice;
 
 //import java.util.Properties;
+import computerrepairservice.exception.ComponentNotFoundException;
+import computerrepairservice.exception.DamageRangeInvalidException;
 
 public class PowerUnit extends Component {
     private int wattage;
@@ -41,7 +43,7 @@ public class PowerUnit extends Component {
     }
 
     @Override 
-    public int calculatePrice() {
+    public int determinePrice() {
         //output the diagnosis results of the power unit
         Diagnostic diag = new Diagnostic();
         diag.result(nameComponent, statusOfComponent());
@@ -59,17 +61,34 @@ public class PowerUnit extends Component {
         
         if(statusOfComponent() == 2) {
             price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
-            time = 0.5; //time for replacing any component; one full day
         }
         else if (statusOfComponent() == 3) {
             price = zeroPrice; //no cost for a part that still works
-            time = 0.0; //no time necessary for comonents that still work
         }
         
-        //add up all individual prices determined in each subclass
-        price += price;
+        price_array[3] = price;
         
         return price;
     }
 
+    @Override
+    public double determineTime() {  
+        switch (statusOfComponent()) {
+            case 1:
+                time = 1.0; //time for replacing any component; one full day
+                break;
+            case 2:
+                time = 0.5; //time for replacing any component; one full day
+                break;
+            case 3:
+                time = 0.0; //no time necessary for comonents that still work
+                break;
+            default:
+                break;
+        }
+        
+        time_array[3] = time;
+        
+        return time;
+    }
 }
