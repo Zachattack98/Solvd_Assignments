@@ -19,9 +19,9 @@ public class ComputerRepairService{
     public static void main(String[] args) {
         
         try {
-            ServiceShop techShop = new ServiceShop("Gyro Tech Computer Repair Service", "Irvine, CA");
+            ServiceShop techShop1 = new ServiceShop("Gyro Tech Computer Repair Service", "Irvine, CA");
             //techShop.validShop();
-            System.out.println(techShop.toString());
+            log.info(techShop1.toString());
             System.out.println();
         }catch (ShopNotFoundException se) {
             log.info(se.getMessage());
@@ -49,11 +49,16 @@ public class ComputerRepairService{
             //HomeCom home = new HomeCom("Yes");
             //home.proceed();
             
+            UniqueFileWords unique = new UniqueFileWords("*Screen, Motherboard, CPU, *HardDrive, Speakers, *USBAdapter, *PowerUnit, *Fan, Memory, DataStorage");
+            unique.uniqueList();
+            
             Diagnostic diag = new Diagnostic();
             System.out.println(diag.toString());
             System.out.println();   
                     
             try {
+                ServiceShop techShop2 = new ServiceShop();
+                
                 //a set collection that contains no duplicates of component names: HashSet
                 Set<String> st = new HashSet<>();
                 
@@ -79,7 +84,6 @@ public class ComputerRepairService{
                 //temporary variables required to output each result outside of for-each loop where object is defined
                 int tempcost = 0;
                 double temptime = 0;
-            
                 List<String> lst = new ArrayList<>();
     
                 //use for-each loop to implement calculatePrice() method in each sub class of Component()
@@ -88,20 +92,20 @@ public class ComputerRepairService{
                     component.log(marker);
                     //if no errors occurred, begin diagnosis
                     component.determinePrice();
-                    tempcost = component.calculatePrice();
+                    tempcost = techShop2.calculatePrice(component.price);
                     //now that we have the status, add it to the list
                     lst.add(Integer.toString(component.statusOfComponent()));
                     component.determineTime();
-                    temptime = component.calculateTime();
+                    temptime = techShop2.calculateTime(component.time);
                     
-                    log.info(component.calculatePrice());
-                    log.info(component.calculateTime());
+                    log.info(techShop2.calculatePrice(component.price));
+                    log.info(techShop2.calculateTime(component.time));
                 
                     diag.printTestNumber();
                     
-                    component.recordDamage();
-                    component.recordPrice();
-                    component.recordTime();
+                    diag.recordDamage(component.damage);
+                    diag.recordPrice(component.price);
+                    diag.recordTime(component.time);
                     
                     log.info(component.toString());
                     System.out.println();
