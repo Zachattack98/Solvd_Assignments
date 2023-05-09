@@ -1,25 +1,26 @@
 package computerrepairservice;
 
-//import java.util.Properties;
 import computerrepairservice.exception.ShopNotFoundException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
- 
 //cannot be overriden/modified by any subclasses
 final class ServiceShop {
     private String nameShop;
     private String location;
+    //ArrayList<Integer> arrPrice = new ArrayList<>(NUM_COMPONENTS); //save all prices found in each subclass in this array
+    //ArrayList<Double> arrTime = new ArrayList<>(NUM_COMPONENTS); //save all time intervals found in each subclass in this array
+    int totalPrice;
+    int totalTime;
     
-    protected static final Logger SHOP_LOGGER = LogManager.getLogger();
-    private Logger logger = SHOP_LOGGER;
+    protected Logger shopLogger = LogManager.getLogger();
 
     protected Logger getLogger() {
-        return logger;
+        return shopLogger;
     }
 
-    protected void setLogger(Logger logger) {
-        this.logger = logger;
+    protected void setLogger(Logger shopLogger) {
+        this.shopLogger = shopLogger;
     }
     
     public String getNameShop() {
@@ -48,6 +49,8 @@ final class ServiceShop {
         this.location = location;
     }
     
+    public ServiceShop() {}
+    
     //static block, called before program even runs
     static {
         System.out.println("Welcome to our Computer Repair shop fine customer!!");
@@ -57,8 +60,14 @@ final class ServiceShop {
         return("Here at " + nameShop + ", we offer the best computer repair service in " + location + "!");
     }
     
-    /*public void validShop(){
-        logger.error(e.getMessage());
-        System.exit(1);
-    }*/
+    public int calculatePrice(int price) {
+        totalPrice += price;
+        return totalPrice;
+    }
+
+    public double calculateTime(double time) {
+        totalTime += time;
+        return totalTime;
+    }
+   
 }
