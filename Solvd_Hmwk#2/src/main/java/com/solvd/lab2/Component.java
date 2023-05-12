@@ -9,20 +9,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.Marker;
 
-interface Stat {
-    //unchangeable static variables for determing repair/replacement status
-    public final static int STATUS_REPAIR = 1;
-    public final static int STATUS_REPLACE = 2;
-    public final static int STATUS_WORKING = 3;
-}
-
-public abstract class Component implements Stat, ListComponent, NumberComponent {
+public abstract class Component implements ListComponent, NumberComponent {
     public String nameComponent; //component name
     protected double damage; //damage done to component
     protected int price; //price the component given its specifications
     protected double time; //number of days the repairs will take
     protected static int priceMultiplier = 2; //for replacement only; multiply the assigned price
-    protected static int zeroPrice = 0; //for working only; reassign price as no cost
     
     protected Logger componentLogger = LogManager.getLogger();
     
