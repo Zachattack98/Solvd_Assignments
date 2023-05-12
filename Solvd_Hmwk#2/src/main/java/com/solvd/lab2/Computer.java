@@ -3,6 +3,7 @@ package computerrepairservice;
 //import java.util.Properties;
 import computerrepairservice.exception.ComputerNotFoundException;
 import computerrepairservice.interfaces.InitVerify;
+import computerrepairservice.enums.Type;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +12,6 @@ public class Computer implements InitVerify {
     protected double weight;
     private int ramSize;
     private int diskSize;
-    //possible to use PowerUnit in place of String to call propeties from PowerUnit class
     public String power;
     
     protected static final Logger COMPUTER_LOGGER = LogManager.getLogger();
@@ -56,12 +56,15 @@ public class Computer implements InitVerify {
     //classes with the one variable in the parameter
     public Computer() {}
     
-    @Override public void printComputerInfo() {
+    @Override 
+    public void printComputerInfo() {
         if(weight < 5.0) {
-            System.out.println("Your Laptop contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.");
+            Type laptop = Type.LAPTOP;
+            System.out.println("Your " + laptop + " contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.");
         }
         else if(weight >= 5.0 && weight <= 10.0) {
-            System.out.println("Your Computer Monitor contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.");
+            Type home = Type.HOME;
+            System.out.println("Your " + home + " contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.");
         }
         else {
             System.out.println("Invalid specification of computer model!!");
@@ -80,11 +83,5 @@ public class Computer implements InitVerify {
             System.out.println();
         }
         System.out.println();
-
     }
-    
-    /*public void validComputer() {
-        logger.error(e.getMessage());
-        System.exit(1);
-    }*/
 }
