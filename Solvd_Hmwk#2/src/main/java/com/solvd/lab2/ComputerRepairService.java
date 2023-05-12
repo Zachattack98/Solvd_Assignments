@@ -4,6 +4,7 @@ import computerrepairservice.exception.ShopNotFoundException;
 import computerrepairservice.exception.ComputerNotFoundException;
 import computerrepairservice.exception.ComponentNotFoundException;
 import computerrepairservice.exception.DamageRangeInvalidException;
+import computerrepairservice.enums.Name;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.ArrayList;
@@ -20,16 +21,12 @@ public class ComputerRepairService{
         
         try {
             ServiceShop techShop1 = new ServiceShop("Gyro Tech Computer Repair Service", "Irvine, CA");
-            //techShop.validShop();
+            //techShop1.validShop();
             log.info(techShop1.toString());
             System.out.println();
         }catch (ShopNotFoundException se) {
             log.info(se.getMessage());
         }
-        
-        /*writecomponentlistException();
-        System.out.println("Here's the list of all components our company typically tests: ");
-        readcomponentlistException();*/
          
         try {
             Computer comp = new Computer(4.3, 16, 4);
@@ -49,11 +46,14 @@ public class ComputerRepairService{
             //HomeCom home = new HomeCom("Yes");
             //home.proceed();
             
+            Name cname = Name.SCREEN; //can be any of the constants, only used to initialize cname
+            cname.nameInfo();
+            
             UniqueFileWords unique = new UniqueFileWords("*Screen, Motherboard, CPU, *HardDrive, Speakers, *USBAdapter, *PowerUnit, *Fan, Memory, DataStorage");
             unique.uniqueList();
             
             Diagnostic diag = new Diagnostic();
-            System.out.println(diag.toString());
+            log.info(diag.toString());
             System.out.println();   
                     
             try {
@@ -81,10 +81,8 @@ public class ComputerRepairService{
                 //create marker object
                 Marker marker = MarkerManager.getMarker("CLASS");
 
-                //temporary variables required to output each result outside of for-each loop where object is defined
-                int tempcost = 0;
-                double temptime = 0;
-                List<String> lst = new ArrayList<>();
+                //List for storing the repair status of each component
+                List<Integer> lst = new ArrayList<>();
     
                 //use for-each loop to implement calculatePrice() method in each sub class of Component()
                 for(Component component: components) {
@@ -92,11 +90,11 @@ public class ComputerRepairService{
                     component.log(marker);
                     //if no errors occurred, begin diagnosis
                     component.determinePrice();
-                    tempcost = techShop2.calculatePrice(component.price);
+                    techShop2.calculatePrice(component.price);
                     //now that we have the status, add it to the list
-                    lst.add(Integer.toString(component.statusOfComponent()));
+                    lst.add(component.statusOfComponent());
                     component.determineTime();
-                    temptime = techShop2.calculateTime(component.time);
+                    techShop2.calculateTime(component.time);
                     
                     log.info(techShop2.calculatePrice(component.price));
                     log.info(techShop2.calculateTime(component.time));
@@ -113,9 +111,7 @@ public class ComputerRepairService{
                 
                 diag.listOfStats(st, lst);
                 
-                //output overall cost and time it will take.
-                System.out.println("Total cost for repairs: $" + tempcost + ", and will take " + temptime + " days to finish!");
-                System.out.println();
+                techShop2.printPriceAndTime();
             }catch (ComponentNotFoundException | DamageRangeInvalidException dce) { //multicatch
                 log.info(dce.getMessage());
             }
