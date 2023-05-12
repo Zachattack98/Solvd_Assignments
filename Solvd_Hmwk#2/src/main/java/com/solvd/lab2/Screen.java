@@ -3,6 +3,9 @@ package computerrepairservice;
 //import java.util.Properties;
 import computerrepairservice.exception.ComponentNotFoundException;
 import computerrepairservice.exception.DamageRangeInvalidException;
+import computerrepairservice.enums.Stat;
+import computerrepairservice.enums.Time;
+import java.util.function.IntConsumer;
 
 public class Screen extends Component {
     private int screensz;
@@ -32,13 +35,16 @@ public class Screen extends Component {
     @Override 
     public int statusOfComponent() {
         if(damage >= 11.0 && damage <= 53.0) {
-            return STATUS_REPAIR;
+            Stat st = Stat.REPAIR;
+            return st.getStatComponent();
         }
         else if(damage > 53.0) {
-            return STATUS_REPLACE;
+            Stat st = Stat.REPLACE;
+            return st.getStatComponent();
         }
         else {
-            return STATUS_WORKING;
+            Stat st = Stat.WORKING;
+            return st.getStatComponent();
         }
     }
 
@@ -60,36 +66,29 @@ public class Screen extends Component {
         }
         
         if(statusOfComponent() == 2) {
-            price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
+            //create IntConsumer Instance then use accept method to get the price
+            IntConsumer mul = p -> p *= priceMultiplier; //double the price if the cooling fan needs to be replaced
+            mul.accept(price);
         }
         else if (statusOfComponent() == 3) {
-            price = zeroPrice; //no cost for a part that still works
+            price = 0; //no cost for a part that still works
         }
-        
-        price_array[0] = price;
         
         return price;
     }
     
     @Override
     public double determineTime() {  
+        Time t;
         switch (statusOfComponent()) {
             case 1:
-                time = 1.0; //time for replacing any component; one full day
-                break;
+                t = Time.FULLDAY;
+                return t.getTime();
             case 2:
-                time = 0.5; //time for replacing any component; one full day
-                break;
-            case 3:
-                time = 0.0; //no time necessary for comonents that still work
-                break;
+                t = Time.HALFDAY;
+                return t.getTime();
             default:
-                break;
+                return 0.0;
         }
-        
-        time_array[0] = time;
-
-        return time;
     }
-    
 }

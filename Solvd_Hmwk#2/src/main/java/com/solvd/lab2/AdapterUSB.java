@@ -3,6 +3,10 @@ package computerrepairservice;
 //import java.util.Properties;
 import computerrepairservice.exception.ComponentNotFoundException;
 import computerrepairservice.exception.DamageRangeInvalidException;
+import computerrepairservice.enums.Stat;
+import computerrepairservice.enums.Time;
+import java.util.function.DoublePredicate;
+import java.util.function.IntConsumer;
 
 public class AdapterUSB extends Component {
     private int numAdapters;
@@ -31,15 +35,27 @@ public class AdapterUSB extends Component {
     
     @Override 
     public int statusOfComponent() {
+        //use DoublePredicate to test for valid damage results
+        DoublePredicate dp = (dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); };
         
-        if(damage >= 9.0 && damage <= 57.0) {
-            return STATUS_REPAIR;
-        }
-        else if(damage > 57.0) {
-            return STATUS_REPLACE;
+        if(dp.test(damage)) { //if damage is between 0.0 and 100.0 test will return true
+            if(damage >= 9.0 && damage <= 57.0) {
+                Stat st = Stat.REPAIR;
+                return st.getStatComponent();
+            }
+            else if(damage > 57.0) {
+                Stat st = Stat.REPLACE;
+                return st.getStatComponent();
+            }
+            else {
+                Stat st = Stat.WORKING;
+                return st.getStatComponent();
+            }
         }
         else {
-            return STATUS_WORKING;
+            System.out.println("Invalid Damage Calculation!");
+            System.out.println();
+            return 0;
         }
     }
 
@@ -66,35 +82,29 @@ public class AdapterUSB extends Component {
         }
         
         if(statusOfComponent() == 2) {
-            price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
+            //create IntConsumer Instance then use accept method to get the price
+            IntConsumer mul = p -> p *= priceMultiplier; //double the price if the cooling fan needs to be replaced
+            mul.accept(price);
         }
         else if (statusOfComponent() == 3) {
-            price = zeroPrice; //no cost for a part that still works
+            price = 0; //no cost for a part that still works
         }
-        
-        price_array[2] = price;
         
         return price;
     }
 
     @Override
     public double determineTime() {  
+        Time t;
         switch (statusOfComponent()) {
             case 1:
-                time = 1.0; //time for replacing any component; one full day
-                break;
+                t = Time.FULLDAY;
+                return t.getTime();
             case 2:
-                time = 0.5; //time for replacing any component; one full day
-                break;
-            case 3:
-                time = 0.0; //no time necessary for comonents that still work
-                break;
+                t = Time.HALFDAY;
+                return t.getTime();
             default:
-                break;
+                return 0.0;
         }
-        
-        time_array[2] = time;
-        
-        return time;
     }
 }
