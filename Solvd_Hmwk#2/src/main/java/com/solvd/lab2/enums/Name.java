@@ -1,26 +1,17 @@
-package computerrepairservice.enums;
+package com.solvd.lab2.enums;
 
 public enum Name {
-    SCREEN,
-    HARDDRIVE,
-    ADAPTERS,
-    POWERUNIT,
-    COOLINGFAN;
-    
-    /*SCREEN("LCD Screen"),
+    SCREEN("LCD Screen"),
     HDD("Hard Drive"),
     USB ("USB Adapters"),
     POWERUNIT ("Power Unit"),
-    COOLINGFAN ("Cooling Fan");*/
-    
-    //print all constants individually
-    private Name() {
-        System.out.println("List of components that will be tested:");
-        System.out.println();
-    }
-    
-    public void nameInfo() {
-        System.out.println("All of these components can be tested in home computer or laptop.");
-        System.out.println();
+    COOLINGFAN ("Cooling Fan");
+
+    private String nameCompnt = null;
+
+    private Name() { }
+
+    public String getName() {
+        return this.nameCompnt;
     }
 }
