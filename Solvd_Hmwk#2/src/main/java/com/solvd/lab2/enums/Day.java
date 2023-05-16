@@ -1,27 +1,27 @@
-package computerrepairservice.enums;
+package com.solvd.lab2.enums;
 
-import computerrepairservice.lambdas.Function;
+import com.solvd.lab2.lambdas.Function;
 
 public enum Day {
-    MONDAY, 
-    TUESDAY, 
+    MONDAY,
+    TUESDAY,
     WEDNESDAY,
-    THURSDAY, 
-    FRIDAY, 
+    THURSDAY,
+    FRIDAY,
     SATURDAY,
     SUNDAY;
-    
-    public void halfOffDay(Day day, int price) {
-        Function<Integer, Float> factor = null;
-        
+
+    public void halfOffDay(Function<Integer, Float> factor, Day day, int price) {
+        factor = null;
+
         //half days are Tuesday and Thursday
         if(day==TUESDAY || day==THURSDAY) {
             factor = p -> p/2.0f;
         }
         else { //any other day is full price
             factor = p -> p/1.0f;
-        } 
-        
+        }
+
         factor.apply(price);
     }
 }
