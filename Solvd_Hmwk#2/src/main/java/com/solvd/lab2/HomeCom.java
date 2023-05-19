@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 public class HomeCom extends Computer implements InitDiagnosis {
     private String hdecision;
 
+    private static final Logger HOME_LOGGER = LogManager.getLogger(HomeCom.class);
+
     public String getHdecision() {
         return hdecision;
     }
@@ -22,7 +24,7 @@ public class HomeCom extends Computer implements InitDiagnosis {
         super(weight, ramSize, diskSize); //must be first statement in constructor
         //if no viable computer is empty
         if(weight == 0.0 || (diskSize == 0 && ramSize == 0)) {
-            throw new ComputerNotFoundException("No computer found to be diagnosed!");
+            throw new ComputerNotFoundException("No computer found to be diagnosed!\n");
         } else {
             this.weight = weight;
         }
@@ -39,14 +41,13 @@ public class HomeCom extends Computer implements InitDiagnosis {
 
         //if it is a home computer and powers on, ask customer if you can proceed with diagnosis
         if(weight >= 5.0 && weight <= 10.0 && power.equals("No")){
-            log.info("Do you want me to take a closer look?");
+            HOME_LOGGER.info("Do you want me to take a closer look?");
             hdecision = myObj.nextLine();
             if(hdecision.equals("Yes")) {
-                log.info("Great, I'll proceed with the Diagnosis!");
-                System.out.println();
+                HOME_LOGGER.info("Great, I'll proceed with the Diagnosis!\n");
             }
             else if(hdecision.equals("No")) {
-                log.info("Alright, thanks for stopping by!");
+                HOME_LOGGER.info("Alright, thanks for stopping by!\n");
             }
         }
     }

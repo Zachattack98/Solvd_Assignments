@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 public class Laptop extends Computer implements InitDiagnosis {
     private String ldecision;
 
+    private static final Logger LAPTOP_LOGGER = LogManager.getLogger(Laptop.class);
+
     public String getLdecision() {
         return ldecision;
     }
@@ -23,7 +25,7 @@ public class Laptop extends Computer implements InitDiagnosis {
 
         //if no viable computer is empty
         if(weight == 0.0 || (diskSize == 0 && ramSize == 0)) {
-            throw new ComputerNotFoundException("No computer found to be diagnosed!");
+            throw new ComputerNotFoundException("No computer found to be diagnosed!\n");
         } else {
             this.weight = weight;
         }
@@ -40,14 +42,13 @@ public class Laptop extends Computer implements InitDiagnosis {
 
         //if it is a laptop and powers on, ask customer if you can proceed with diagnosis
         if(weight < 5.0 && power.equals("No")){
-            log.info("Do you want me to take a closer look?");
+            LAPTOP_LOGGER.info("Do you want me to take a closer look?");
             ldecision = myObj.nextLine();
             if(ldecision.equals("Yes")) {
-                log.info("Great, I'll proceed with the Diagnosis!");
-                System.out.println();
+                LAPTOP_LOGGER.info("Great, I'll proceed with the Diagnosis!\n");
             }
             else if(ldecision.equals("No")) {
-                log.info("Alright, thanks for stopping by!");
+                LAPTOP_LOGGER.info("Alright, thanks for stopping by!\n");
             }
         }
     }
