@@ -1,10 +1,21 @@
-package computerrepairservice.enums;
+package com.solvd.lab2.enums;
+
+import java.util.stream.Stream;
 
 public enum Time {
     FULLDAY,
-    HALFDAY;
-    
-    public double getTime() {   
+    HALFDAY,
+    ZERODAY;    //required only for List<Time> in ServiceShop
+
+    double time;
+
+    Time(double time) {
+        this.time = time;
+    }
+
+    Time() { }
+
+    public double getTime() {
         switch (this) {
             case FULLDAY:
                 return 1.0; //time for replacing any component; one full day
@@ -14,4 +25,9 @@ public enum Time {
                 return 0.0;
         }
     }
+
+    public static Stream<Time> stream() {
+        return Stream.of(Time.values());
+    }
+
 }

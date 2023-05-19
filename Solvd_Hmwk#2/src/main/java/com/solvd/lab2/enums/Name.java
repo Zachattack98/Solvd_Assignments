@@ -1,5 +1,7 @@
 package com.solvd.lab2.enums;
 
+import java.util.stream.Stream;
+
 public enum Name {
     SCREEN("LCD Screen"),
     HDD("Hard Drive"),
@@ -9,9 +11,13 @@ public enum Name {
 
     private String nameCompnt = null;
 
-    private Name() { }
+    Name(String nameCompnt) { this.nameCompnt = nameCompnt;}
 
     public String getName() {
         return this.nameCompnt;
+    }
+
+    public static Stream<Name> stream() {
+        return Stream.of(Name.values());
     }
 }
