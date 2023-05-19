@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 public class PowerUnit extends Component {
     private int wattage;
 
+    private static final Logger POWER_LOGGER = LogManager.getLogger(PowerUnit.class);
+
     public PowerUnit(String nameComponent, double damage, int wattage) throws ComponentNotFoundException, DamageRangeInvalidException {
         super(nameComponent, damage);
 
@@ -38,7 +40,6 @@ public class PowerUnit extends Component {
     @Override
     public int statusOfComponent(DoublePredicate dp) {
         //use DoublePredicate to test for valid damage results
-        dp = (dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); };
 
         if(dp.test(damage)) { //if damage is between 0.0 and 100.0 test will return true
             if(damage >= 2.0 && damage <= 37.0) {
@@ -55,8 +56,7 @@ public class PowerUnit extends Component {
             }
         }
         else {
-            log.info("Invalid Damage Calculation!");
-            System.out.println();
+            POWER_LOGGER.info("Invalid Damage Calculation!\n");
             return 0;
         }
     }
@@ -65,7 +65,7 @@ public class PowerUnit extends Component {
     public int determinePrice(IntConsumer mul) {
         //output the diagnosis results of the power unit
         Diagnostic diag = new Diagnostic();
-        diag.result(nameComponent, statusOfComponent());
+        diag.result(nameComponent, statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }));
 
         time = 0.5; //default time for repairing any component; half a day
         if(wattage <= 30) {
@@ -78,12 +78,12 @@ public class PowerUnit extends Component {
             price = 60;
         }
 
-        if(statusOfComponent() == 2) {
+        if(statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 2) {
             //create IntConsumer Instance then use accept method to get the price
             mul = p -> p *= priceMultiplier; //double the price if the cooling fan needs to be replaced
             mul.accept(price);
         }
-        else if (statusOfComponent() == 3) {
+        else if (statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 3) {
             price = 0; //no cost for a part that still works
         }
 
@@ -93,7 +93,7 @@ public class PowerUnit extends Component {
     @Override
     public double determineTime() {
         Time t;
-        switch (statusOfComponent()) {
+        switch (statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); })) {
             case 1:
                 t = Time.FULLDAY;
                 return t.getTime();

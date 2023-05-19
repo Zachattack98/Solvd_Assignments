@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 public class AdapterUSB extends Component {
     private int numAdapters;
 
+    private static final Logger ADAPTER_LOGGER = LogManager.getLogger(AdapterUSB.class);
+
     public AdapterUSB(String nameComponent, double damage, int numAdapters) throws ComponentNotFoundException, DamageRangeInvalidException {
         super(nameComponent, damage);
 
@@ -38,7 +40,6 @@ public class AdapterUSB extends Component {
     @Override
     public int statusOfComponent(DoublePredicate dp) {
         //use DoublePredicate to test for valid damage results
-        dp = (dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); };
 
         if(dp.test(damage)) { //if damage is between 0.0 and 100.0 test will return true
             if(damage >= 9.0 && damage <= 57.0) {
@@ -55,8 +56,7 @@ public class AdapterUSB extends Component {
             }
         }
         else {
-            log.info("Invalid Damage Calculation!");
-            System.out.println();
+            ADAPTER_LOGGER.info("Invalid Damage Calculation!");
             return 0;
         }
     }
@@ -66,7 +66,7 @@ public class AdapterUSB extends Component {
     public int determinePrice(IntConsumer mul) {
         //output the diagnosis results of the USB adapter(s)
         Diagnostic diag = new Diagnostic();
-        diag.result(nameComponent, statusOfComponent());
+        diag.result(nameComponent, statusOfComponent(dmg -> { return (dmg >= 0.0 | dmg <= 100.0); }));
 
         time = 0.5; //default time for repairing any component; half a day
         switch(numAdapters) {
@@ -83,12 +83,11 @@ public class AdapterUSB extends Component {
                 break;
         }
 
-        if(statusOfComponent() == 2) {
+        if(statusOfComponent(dmg -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 2) {
             //create IntConsumer Instance then use accept method to get the price
-            mul = p -> p *= priceMultiplier; //double the price if the cooling fan needs to be replaced
             mul.accept(price);
         }
-        else if (statusOfComponent() == 3) {
+        else if (statusOfComponent(dmg -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 3) {
             price = 0; //no cost for a part that still works
         }
 
@@ -98,7 +97,7 @@ public class AdapterUSB extends Component {
     @Override
     public double determineTime() {
         Time t;
-        switch (statusOfComponent()) {
+        switch (statusOfComponent(dmg -> { return (dmg >= 0.0 | dmg <= 100.0); })) {
             case 1:
                 t = Time.FULLDAY;
                 return t.getTime();
