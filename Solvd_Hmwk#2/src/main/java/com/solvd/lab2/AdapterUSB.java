@@ -66,7 +66,7 @@ public class AdapterUSB extends Component {
     public int determinePrice(IntConsumer mul) {
         //output the diagnosis results of the USB adapter(s)
         Diagnostic diag = new Diagnostic();
-        diag.result(nameComponent, statusOfComponent(dmg -> { return (dmg >= 0.0 | dmg <= 100.0); }));
+        diag.result(nameComponent, statusOfComponent(dmg -> (dmg >= 0.0 & dmg <= 100.0)));
 
         time = 0.5; //default time for repairing any component; half a day
         switch(numAdapters) {
@@ -83,12 +83,12 @@ public class AdapterUSB extends Component {
                 break;
         }
 
-        if(statusOfComponent(dmg -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 2) {
+        if(statusOfComponent(dmg -> (dmg >= 0.0 & dmg <= 100.0)) == 2) {
             //create IntConsumer Instance then use accept method to get the price
-            mul = p -> p *= priceMultiplier; //double the price if the USB Adapter(s) needs to be replaced
+            mul = p -> price *= priceMultiplier; //double the price if the USB Adapter(s) needs to be replaced
             mul.accept(price);
         }
-        else if (statusOfComponent(dmg -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 3) {
+        else if (statusOfComponent(dmg -> (dmg >= 0.0 & dmg <= 100.0)) == 3) {
             price = 0; //no cost for a part that still works
         }
 
@@ -98,7 +98,7 @@ public class AdapterUSB extends Component {
     @Override
     public double determineTime() {
         Time t;
-        switch (statusOfComponent(dmg -> { return (dmg >= 0.0 | dmg <= 100.0); })) {
+        switch (statusOfComponent(dmg -> (dmg >= 0.0 & dmg <= 100.0))) {
             case 1:
                 t = Time.FULLDAY;
                 return t.getTime();

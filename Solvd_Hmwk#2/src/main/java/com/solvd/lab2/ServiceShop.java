@@ -4,12 +4,9 @@ import com.solvd.lab2.enums.Day;
 import com.solvd.lab2.enums.Time;
 import com.solvd.lab2.exception.ShopNotFoundException;
 import com.solvd.lab2.lambdas.ToIntFunction;
-import com.solvd.lab2.lambdas.Function;
 
 import java.util.*;
-import java.util.function.DoublePredicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.solvd.lab2.linkedlist.LinkedListCustom;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +15,7 @@ import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
 import static com.solvd.lab2.Component.priceMultiplier;
+import static com.solvd.lab2.Diagnostic.printTestNumber;
 
 //cannot be overridden/modified by any subclasses
 public class ServiceShop {
@@ -65,17 +63,7 @@ public class ServiceShop {
         return("Here at " + nameShop + ", we offer the best computer repair service in " + location + "!\n");
     }
 
-    public int calculatePrice(int price) {
-        totalPrice += price;
-        return totalPrice;
-    }
-
-    public double calculateTime(double time) {
-        totalTime += time;
-        return totalTime;
-    }
-
-    public void printPriceAndTime(ToIntFunction<Double> intObj, Function<Integer, Float> factor) {
+    public void printPriceAndTime(ToIntFunction<Double> intObj) {
         Math.round(totalTime); //first round the total time up (0.5-0.9) or down (0.0-0.4)
         //must multiply by some value to allow conversion.
         SHOP_LOGGER.info("What day is it today? ");
@@ -90,11 +78,11 @@ public class ServiceShop {
             case FRIDAY:
             case SATURDAY:
             case SUNDAY:
-                day.halfOffDay(factor = p -> p, totalPrice);
+                day.halfOffDay(p -> p, totalPrice);
                 break;
             case TUESDAY:
             case THURSDAY:
-                day.halfOffDay(factor = p -> p/2.0f, totalPrice);
+                day.halfOffDay(p -> p/2.0f, totalPrice);
                 break;
             default:
                 SHOP_LOGGER.info("Invalid day! We'll just assume is a full price day\n");
@@ -117,7 +105,7 @@ public class ServiceShop {
         setStream.forEach(st::add); //adding name component to hash set
          */
 
-        Set<String> unsortedNames = listOfComponents.stream().map(Component::getName).collect(Collectors.toSet());;
+        Set<String> unsortedNames = listOfComponents.stream().map(Component::getName).collect(Collectors.toSet());
         SHOP_LOGGER.info("List of components that will be diagnosed: "); //Before diagnosis, list names of all components
         unsortedNames.forEach(compnt -> SHOP_LOGGER.info("{" + compnt + "} "));
 
@@ -138,21 +126,21 @@ public class ServiceShop {
 
             //if no errors occurred, begin diagnosis
             //First, price
-            component.determinePrice(p -> p *= priceMultiplier); //double the price if the cooling fan needs to be replaced
-            calculatePrice(component.price);
+            component.determinePrice(p -> component.price *= priceMultiplier); //double the price if the cooling fan needs to be replaced
+            totalPrice += component.price;
 
             //now that we have the status, add it to the list
-            lstStat.add(component.statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }));
+            lstStat.add(component.statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0)));
 
             //Second, time
             component.determineTime();
-            calculateTime(component.time);
+            totalTime += component.time;
 
-            diag.printTestNumber();
+            printTestNumber();
 
             diag.recordDamage(component.damage);
             diag.recordPrice(component.price);
-            diag.recordTime(component.time);
+            diag.recordTime(component.determineTime()); //using component.time would just receive the same value after each iteration
 
             if(component.time == 1.0) {
                 listOfComponentTime.add(Time.FULLDAY);
@@ -171,7 +159,7 @@ public class ServiceShop {
         //that are still working, i.e. require no payment
         diag.listOfStats(unsortedNames, lstStat, (t, value) -> {
             if(t.contains(value)) {
-                SHOP_LOGGER.info("Among the diagnosed components, at least one requires no fixing:");
+                SHOP_LOGGER.info("Among the diagnosed components, at least one requires no fixing!");
             }
         });
 
@@ -185,12 +173,11 @@ public class ServiceShop {
         SHOP_LOGGER.info("List of Time Needed:" + collectTime);
 
         //print total price and time
-        printPriceAndTime(t -> (int)(t*1), p -> p);
+        printPriceAndTime(t -> (int)(t*1));
     }
 
-    public List<Component> registerComponent(Component components) {
+    public void registerComponent(Component components) {
         listOfComponents.add(components);
-        return listOfComponents;
     }
 
 }

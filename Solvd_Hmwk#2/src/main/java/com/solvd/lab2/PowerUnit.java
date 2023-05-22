@@ -65,25 +65,25 @@ public class PowerUnit extends Component {
     public int determinePrice(IntConsumer mul) {
         //output the diagnosis results of the power unit
         Diagnostic diag = new Diagnostic();
-        diag.result(nameComponent, statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }));
+        diag.result(nameComponent, statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0)));
 
         time = 0.5; //default time for repairing any component; half a day
-        if(wattage <= 30) {
+        if(wattage >= 0 && wattage < 30) {
             price = 25;
         }
-        else if(wattage > 30 && wattage <= 60) {
+        else if(wattage >= 30 && wattage <= 60) {
             price = 40;
         }
         else {
             price = 60;
         }
 
-        if(statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 2) {
+        if(statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0)) == 2) {
             //create IntConsumer Instance then use accept method to get the price
-            mul = p -> p *= priceMultiplier; //double the price if the power unit needs to be replaced
+            mul = p -> price *= priceMultiplier; //double the price if the power unit needs to be replaced
             mul.accept(price);
         }
-        else if (statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 3) {
+        else if (statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0)) == 3) {
             price = 0; //no cost for a part that still works
         }
 
@@ -93,7 +93,7 @@ public class PowerUnit extends Component {
     @Override
     public double determineTime() {
         Time t;
-        switch (statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); })) {
+        switch (statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0))) {
             case 1:
                 t = Time.FULLDAY;
                 return t.getTime();
