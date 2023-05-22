@@ -1,8 +1,6 @@
 package com.solvd.lab2;
 
 //import java.util.Properties;
-import com.solvd.lab2.enums.Name;
-import com.solvd.lab2.enums.Stat;
 import com.solvd.lab2.interfaces.NumberComponent;
 import com.solvd.lab2.linkedlist.LinkedListCustom;
 
@@ -14,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Diagnostic implements NumberComponent{
-    public int status; //0 == good; 1 == repair; 2 == replace
     public static int testNumber = 0;
 
     //a collection for storing the amount of damage: LinkedList
@@ -28,10 +25,6 @@ public class Diagnostic implements NumberComponent{
     Map<String, String> mp = new HashMap<>();
 
     protected static final Logger DIAGNOSTIC_LOGGER = LogManager.getLogger(Diagnostic.class);
-
-    public Diagnostic(int status) {
-        this.status = status;
-    }
 
     public Diagnostic() {}
 
@@ -63,14 +56,14 @@ public class Diagnostic implements NumberComponent{
     }
 
     //make sure there is a computer present in order to perform any diagnosis
-    public void computerExists() {
+    /*public void computerExists() {
         try {
             Class.forName("Computer");
         }
         catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void listOfStats(Set<String> s, List<Integer> l, ObjIntConsumer<List<Integer>> consumerObj) {
         //convert both set and list to arrays
@@ -100,10 +93,10 @@ public class Diagnostic implements NumberComponent{
             }
         }
 
-        DIAGNOSTIC_LOGGER.info("The remaining components need to be repaired or replaced:");
+        DIAGNOSTIC_LOGGER.info("These remaining components need to be repaired or replaced:");
 
         //check for all value in hashmap that begin with R (Repair/Replace)
-        List<String> result = mp.entrySet().stream().map(Map.Entry::getValue).
+        List<String> fixResult = mp.entrySet().stream().map(Map.Entry::getValue).
                                 filter(r->r.startsWith("R")).collect(Collectors.toList());
 
         //check the set for names of all components in need of repair/replace
@@ -112,7 +105,7 @@ public class Diagnostic implements NumberComponent{
                                              map(Map.Entry::getKey).
                                              collect(Collectors.toSet());
 
-        DIAGNOSTIC_LOGGER.info(sortedBrokenComponents + " : " + result);
+        DIAGNOSTIC_LOGGER.info(sortedBrokenComponents + " : " + fixResult);
     }
 
     //save all damage amounts
