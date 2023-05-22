@@ -80,7 +80,7 @@ public class PowerUnit extends Component {
 
         if(statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 2) {
             //create IntConsumer Instance then use accept method to get the price
-            mul = p -> p *= priceMultiplier; //double the price if the cooling fan needs to be replaced
+            mul = p -> p *= priceMultiplier; //double the price if the power unit needs to be replaced
             mul.accept(price);
         }
         else if (statusOfComponent((dmg) -> { return (dmg >= 0.0 | dmg <= 100.0); }) == 3) {
