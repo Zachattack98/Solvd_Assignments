@@ -5,38 +5,34 @@ import com.solvd.lab2.exception.ComputerNotFoundException;
 import com.solvd.lab2.exception.ComponentNotFoundException;
 import com.solvd.lab2.exception.DamageRangeInvalidException;
 
-import java.io.IOException;
 
-import com.solvd.lab2.uniquewordcounter.UniqueFileWords;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ComputerRepairService{
-    private static final Logger mainlog = LogManager.getLogger(ComputerRepairService.class);
+    private static final Logger MAIN_LOGGER = LogManager.getLogger(ComputerRepairService.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         //initialize objects
         ServiceShop techShop = null;
-        Computer comp = null;
-        Diagnostic diag = null;
+        Computer comp;
+        Diagnostic diag;
 
         try {
             techShop = new ServiceShop("Gyro Tech Computer Repair Service", "Irvine, CA");
             //techShop1.validShop();
-            mainlog.info(techShop.toString());
-            System.out.println();
+            MAIN_LOGGER.info(techShop.toString());
         }catch (ShopNotFoundException se) {
-            mainlog.info(se.getMessage());
+            MAIN_LOGGER.info(se.getMessage());
         }
 
         try {
             comp = new Computer(4.3, 16, 4);
             //comp.validComputer();
             comp.printComputerInfo();
-            System.out.println();
         }catch (ComputerNotFoundException ce) {
-            mainlog.info(ce.getMessage());
+            MAIN_LOGGER.info(ce.getMessage());
         }
 
         //Error: Yes, No, and everything ele keep turning out invalid
@@ -49,11 +45,11 @@ public class ComputerRepairService{
         //home.proceed();
 
         diag = new Diagnostic();
-        mainlog.info(diag.toString());
-        System.out.println();
+        MAIN_LOGGER.info(diag.toString());
 
         try {
 
+            assert techShop != null;
             techShop.registerComponent(new Screen("LCD Screen", 34.7, 36));
             techShop.registerComponent(new HardDrive("Hard Drive", 87.4, 20));
             techShop.registerComponent(new AdapterUSB("USB Adapter(s)", 0.0, 1));
@@ -62,7 +58,7 @@ public class ComputerRepairService{
 
             techShop.outputToMain(diag);
         }catch (ComponentNotFoundException | DamageRangeInvalidException dce) { //multicatch
-            mainlog.info(dce.getMessage());
+            MAIN_LOGGER.info(dce.getMessage());
         }
         //}
         /*else {
