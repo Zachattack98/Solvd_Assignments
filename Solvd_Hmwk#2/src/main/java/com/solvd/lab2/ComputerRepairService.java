@@ -9,6 +9,7 @@ import com.solvd.lab2.exception.DamageRangeInvalidException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+//Error: output does work in NetBeans but cannot build project successfully to test remaining lambdas
 public class ComputerRepairService{
     private static final Logger MAIN_LOGGER = LogManager.getLogger(ComputerRepairService.class);
 
