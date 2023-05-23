@@ -16,7 +16,7 @@ public class ComputerRepairService{
 
         //initialize objects
         ServiceShop techShop = null;
-        Computer comp;
+        Computer comp = null;
         Diagnostic diag;
 
         try {
@@ -35,36 +35,39 @@ public class ComputerRepairService{
             MAIN_LOGGER.info(ce.getMessage());
         }
 
-        //Error: Yes, No, and everything ele keep turning out invalid
-        //comp.powerOnOff();
+        comp.powerOnOff();
 
-        //if(comp.power.equals("No")) {
-        //Laptop lap = new Laptop("Yes");
-        //lap.proceed();
-        //HomeCom home = new HomeCom("Yes");
-        //home.proceed();
+        if(comp.power.equals("No")) {
+            //This way we'll only implement proceed() once
+            if(comp.weight < 5.0){
+                Laptop lap = new Laptop();
+                lap.proceed();
+            }
+            else if(comp.weight >= 5.0 && comp.weight <= 10.0){
+                HomeCom home = new HomeCom();
+                home.proceed();
+            }
 
-        diag = new Diagnostic();
-        MAIN_LOGGER.info(diag.toString());
+            diag = new Diagnostic();
+            MAIN_LOGGER.info(diag.toString());
 
-        try {
+            try {
 
-            assert techShop != null;
-            techShop.registerComponent(new Screen("LCD Screen", 34.7, 36));
-            techShop.registerComponent(new HardDrive("Hard Drive", 87.4, 20));
-            techShop.registerComponent(new AdapterUSB("USB Adapter(s)", 0.0, 1));
-            techShop.registerComponent(new PowerUnit("Power Supply Unit", 1.9, 70));
-            techShop.registerComponent(new Fan("Cooling Fan", 54.0, 25));
+                assert techShop != null;
+                techShop.registerComponent(new Screen("LCD Screen", 34.7, 36));
+                techShop.registerComponent(new HardDrive("Hard Drive", 87.4, 20));
+                techShop.registerComponent(new AdapterUSB("USB Adapter(s)", 0.0, 1));
+                techShop.registerComponent(new PowerUnit("Power Supply Unit", 1.9, 70));
+                techShop.registerComponent(new Fan("Cooling Fan", 54.0, 25));
 
-            techShop.outputToMain(diag);
-        }catch (ComponentNotFoundException | DamageRangeInvalidException dce) { //multicatch
-            MAIN_LOGGER.info(dce.getMessage());
+                techShop.outputToMain(diag);
+            } catch (ComponentNotFoundException | DamageRangeInvalidException dce) { //multicatch
+                MAIN_LOGGER.info(dce.getMessage());
+            }
         }
-        //}
-        /*else {
-            log.info("Alright, thanks for stopping by!");
-            System.out.println();
-        }*/
+        else {
+            MAIN_LOGGER.info("Alright, thanks for stopping by!");
+        }
     }
 
 }

@@ -26,9 +26,7 @@ public class ServiceShop {
     List<Component> listOfComponents = new ArrayList<>();
     private static final Logger SHOP_LOGGER = LogManager.getLogger(ServiceShop.class);
 
-    public String getNameShop() {
-        return nameShop;
-    }
+    public String getNameShop() { return nameShop; }
 
     public void setNameShop(String nameShop) {
         this.nameShop = nameShop;
@@ -65,46 +63,44 @@ public class ServiceShop {
 
     public void printPriceAndTime(ToIntFunction<Double> intObj) {
         Math.round(totalTime); //first round the total time up (0.5-0.9) or down (0.0-0.4)
-        //must multiply by some value to allow conversion.
+
+        //Create Set of all constants found in enum Day
+        Set<Day> dayNameSet = new HashSet<>();
+        dayNameSet.add(Day.MONDAY);
+        dayNameSet.add(Day.TUESDAY);
+        dayNameSet.add(Day.WEDNESDAY);
+        dayNameSet.add(Day.THURSDAY);
+        dayNameSet.add(Day.FRIDAY);
+        dayNameSet.add(Day.SATURDAY);
+        dayNameSet.add(Day.SUNDAY);
+
         SHOP_LOGGER.info("What day is it today? ");
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         String dayInput = myObj.nextLine();
 
-        Day day = Day.valueOf(dayInput);
-        //Tuesday and Thursday is half off day; any other day is full price
-        switch(day) {
-            case MONDAY:
-            case WEDNESDAY:
-            case FRIDAY:
-            case SATURDAY:
-            case SUNDAY:
-                day.halfOffDay(p -> p, totalPrice);
-                break;
-            case TUESDAY:
-            case THURSDAY:
-                day.halfOffDay(p -> p/2.0f, totalPrice);
-                break;
-            default:
-                SHOP_LOGGER.info("Invalid day! We'll just assume is a full price day\n");
-                break;
+        while(!dayInput.equals("Monday") && !dayInput.equals("Tuesday") && !dayInput.equals("Wednesday")
+                && !dayInput.equals("Thursday") && !dayInput.equals("Friday") && !dayInput.equals("Saturday")
+                && !dayInput.equals("Sunday")) {
+            SHOP_LOGGER.info("Not a valid day, please try again! ");
+            myObj = new Scanner(System.in);  // Create a Scanner object
+            dayInput = myObj.nextLine();
+
         }
+        //temporary variable required for stream as it only takes those that are final
+        String tempInput = dayInput;
+
+        //Only Tuesday and Thursday qre considered half price days
+        //anything else, including non-day inputs, give full price
+        dayNameSet.stream().filter((day) -> (day.getDayName().equals(tempInput))).
+                            filter((half) -> ((half == Day.TUESDAY) || (half == Day.THURSDAY))).map((halfResult) -> {
+                            SHOP_LOGGER.info("Half Off Day!!"); return halfResult;}).
+                            forEachOrdered((halfCalc) -> { totalPrice = (int)(halfCalc.halfOffDay(p -> p/2.0f, totalPrice));});
 
         //output overall cost and time it will take.
-        SHOP_LOGGER.info("Total cost for repairs: $" + totalPrice + ", and will take " + intObj.applyAsInt(totalTime) + " days to finish!\n");
+        SHOP_LOGGER.info("Total cost for repairs: $" + String.format("%.2f", (double)totalPrice) + ", and will take " + intObj.applyAsInt(totalTime) + " days to finish!\n");
     }
 
     public void outputToMain(Diagnostic diag) {
-        /*
-        //a set collection that contains no duplicates of component names: HashSet
-        Set<String> st = new HashSet<>();
-
-        //Stream<String> setStream = null;
-        for (int i = 0; i < NUM_COMPONENTS; i++) {
-            setStream = Stream.of(listOfComponents.get(i).nameComponent);
-        }
-        setStream.forEach(st::add); //adding name component to hash set
-         */
-
         Set<String> unsortedNames = listOfComponents.stream().map(Component::getName).collect(Collectors.toSet());
         SHOP_LOGGER.info("List of components that will be diagnosed: "); //Before diagnosis, list names of all components
         unsortedNames.forEach(compnt -> SHOP_LOGGER.info("{" + compnt + "} "));
@@ -114,10 +110,6 @@ public class ServiceShop {
 
         //List for storing the status of each component
         List<Integer> lstStat = new ArrayList<>();
-
-        //List for storing the fixing time for each component
-        //needs to be List<Time> to access getTime in stream
-        List<Time> listOfComponentTime = new ArrayList<>();
 
         //use for-each loop to implement calculatePrice() method in each sub-class of Component()
         for (Component component : listOfComponents) {
@@ -136,21 +128,11 @@ public class ServiceShop {
             component.determineTime();
             totalTime += component.time;
 
-            printTestNumber();
+            diag.printTestNumber();
 
             diag.recordDamage(component.damage);
             diag.recordPrice(component.price);
             diag.recordTime(component.determineTime()); //using component.time would just receive the same value after each iteration
-
-            if(component.time == 1.0) {
-                listOfComponentTime.add(Time.FULLDAY);
-            }
-            else if(component.time == 0.5) {
-                listOfComponentTime.add(Time.HALFDAY);
-            }
-            else if(component.time == 0.0) {
-                listOfComponentTime.add(Time.ZERODAY);
-            }
 
             SHOP_LOGGER.info(component.toString());
             System.out.println();
@@ -164,13 +146,10 @@ public class ServiceShop {
         });
 
         //print list of each individual price, damage, and time (minus 0.0 time)
-        List<LinkedListCustom> collectPrice = diag.linkedlistPrice.stream().sorted().collect(Collectors.toList());
+        List<Integer> collectPrice = listOfComponents.stream().filter(p -> p.getPrice() > 0).map(Component::getPrice).collect(Collectors.toList());
         SHOP_LOGGER.info("List of Cost Values:" + collectPrice);
-        List<Double> collectDamage = listOfComponents.stream().sorted().map(Component::getDamage).collect(Collectors.toList());
+        List<Double> collectDamage = listOfComponents.stream().filter(d -> d.getDamage() > 0.0).map(Component::getDamage).collect(Collectors.toList());
         SHOP_LOGGER.info("List of Damage Dealt:" + collectDamage);
-        List<Time> collectTime = listOfComponentTime.stream().sorted().filter(t -> t.getTime() > 0.0).
-                                        collect(Collectors.toList());
-        SHOP_LOGGER.info("List of Time Needed:" + collectTime);
 
         //print total price and time
         printPriceAndTime(t -> (int)(t*1));

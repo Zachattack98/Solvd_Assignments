@@ -69,11 +69,6 @@ public class Diagnostic implements NumberComponent{
         //convert both set and list to arrays
         String[] sarray = s.toArray(new String[s.size()]);
         Integer[] larray = l.toArray(new Integer[l.size()]);
-        ServiceShop ss = null;
-
-        //After diagnosis, use sorted method from stream() to sort all components alphabetically
-        Set<String> sortedNames = ss.listOfComponents.stream().sorted().map(Component::getName).collect(Collectors.toCollection(LinkedHashSet::new));
-        DIAGNOSTIC_LOGGER.info("Sorted set of components:" + sortedNames);
 
         consumerObj.accept(l, 3); //use object l from List<Integer> to check for category "Working" (3)
 
@@ -93,17 +88,20 @@ public class Diagnostic implements NumberComponent{
             }
         }
 
-        DIAGNOSTIC_LOGGER.info("These remaining components need to be repaired or replaced:");
+        mp.entrySet().stream().filter(p -> p.getValue().startsWith("W")).
+                map(Map.Entry::getKey).forEach(DIAGNOSTIC_LOGGER::info);
 
-        //check for all value in hashmap that begin with R (Repair/Replace)
-        List<String> fixResult = mp.entrySet().stream().map(Map.Entry::getValue).
-                                filter(r->r.startsWith("R")).collect(Collectors.toList());
+        DIAGNOSTIC_LOGGER.info("These remaining components need to be repaired or replaced:");
 
         //check the set for names of all components in need of repair/replace
         Set<String> sortedBrokenComponents = mp.entrySet().stream().
                                              filter(p -> p.getValue().startsWith("R")).
                                              map(Map.Entry::getKey).
                                              collect(Collectors.toSet());
+
+        //check for all value in hashmap that begin with R (Repair/Replace)
+        List<String> fixResult = mp.entrySet().stream().map(Map.Entry::getValue).
+                                filter(r->r.startsWith("R")).collect(Collectors.toList());
 
         DIAGNOSTIC_LOGGER.info(sortedBrokenComponents + " : " + fixResult);
     }
