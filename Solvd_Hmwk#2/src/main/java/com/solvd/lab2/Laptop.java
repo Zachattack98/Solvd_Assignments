@@ -24,7 +24,7 @@ public class Laptop extends Computer implements InitDiagnosis {
         super(weight, ramSize, diskSize); //must be first statement in constructor
 
         //if no viable computer is empty
-        if(weight == 0.0 || (diskSize == 0 && ramSize == 0)) {
+        if(weight <= 0.0 || (diskSize <= 0 && ramSize <= 0)) {
             throw new ComputerNotFoundException("No computer found to be diagnosed!\n");
         } else {
             this.weight = weight;
@@ -32,24 +32,21 @@ public class Laptop extends Computer implements InitDiagnosis {
         this.ldecision = ldecision;
     }
 
-    public Laptop(String ldecision) {
-        this.ldecision = ldecision;
-    }
+    public Laptop() {}
 
     @Override
     public void proceed() {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
         //if it is a laptop and powers on, ask customer if you can proceed with diagnosis
-        if(weight < 5.0 && power.equals("No")){
-            LAPTOP_LOGGER.info("Do you want me to take a closer look?");
-            ldecision = myObj.nextLine();
-            if(ldecision.equals("Yes")) {
-                LAPTOP_LOGGER.info("Great, I'll proceed with the Diagnosis!\n");
-            }
-            else if(ldecision.equals("No")) {
-                LAPTOP_LOGGER.info("Alright, thanks for stopping by!\n");
-            }
+        LAPTOP_LOGGER.info("Do you want me to take a closer look?");
+        ldecision = myObj.nextLine();
+        if(ldecision.equals("Yes")) {
+            LAPTOP_LOGGER.info("Great, I'll proceed with the Diagnosis!\n");
+        }
+        else if(ldecision.equals("No")) {
+             LAPTOP_LOGGER.info("Alright, thanks for stopping by!\n");
+             System.exit(0);
         }
     }
 }

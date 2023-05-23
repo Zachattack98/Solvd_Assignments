@@ -52,11 +52,11 @@ public class Computer implements InitVerify {
     public void printComputerInfo() {
         if(weight < 5.0) {
             Type laptop = Type.LAPTOP;
-            COMPUTER_LOGGER.info("Your " + laptop + " contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.\n");
+            COMPUTER_LOGGER.info("Your " + laptop.getType() + " contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.\n");
         }
         else if(weight >= 5.0 && weight <= 10.0) {
             Type home = Type.HOME;
-            COMPUTER_LOGGER.info("Your " + home + " contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.\n");
+            COMPUTER_LOGGER.info("Your " + home.getType() + " contains " + ramSize + "GB of RAM and " + diskSize + "GB of storage.\n");
         }
         else {
             COMPUTER_LOGGER.info("Invalid specification of computer model!!\n");
@@ -69,11 +69,9 @@ public class Computer implements InitVerify {
         COMPUTER_LOGGER.info("Does your computer turn on?");
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         power = myObj.nextLine();
-        while(!power.equals("Yes") || !power.equals("No")) {
+        while(!power.equals("Yes") && !power.equals("No")) {
             COMPUTER_LOGGER.info("Invalid input! Please type answer again.\n");
             power = myObj.nextLine();
-            System.out.println();
         }
-        System.out.println();
     }
 }
