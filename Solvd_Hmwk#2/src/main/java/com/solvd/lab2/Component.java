@@ -1,5 +1,6 @@
 package com.solvd.lab2;
 
+import com.solvd.lab2.enums.Time;
 import com.solvd.lab2.interfaces.ListComponent;
 import com.solvd.lab2.interfaces.NumberComponent;
 import com.solvd.lab2.exception.ComponentNotFoundException;
@@ -62,13 +63,14 @@ public abstract class Component implements ListComponent, NumberComponent {
     public String getName() {
         return nameComponent;
     }
-    public double getDamage() {
-        return damage;
+    public double getDamage() { return damage; }
+    public int getPrice() {
+        return price;
     }
 
     @Override
     public String toString() {
-        return ("Fixing the " + nameComponent + " will cost you $" + price + " and will take " + time + " days.\n");
+        return ("Fixing the " + nameComponent + " will cost you $" + price + " and will take " + time + " of a day.\n");
     }
 
     public void log(Marker marker) {
@@ -84,6 +86,18 @@ public abstract class Component implements ListComponent, NumberComponent {
     public abstract int determinePrice(IntConsumer intC);
 
     //return the number of days determined in each sub-class which will then be added together
-    public abstract double determineTime();
+    public double determineTime() {
+        Time t;
 
+        switch (statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0))) {
+            case 1:
+                t = Time.FULLDAY;
+                return t.getTime();
+            case 2:
+                t = Time.HALFDAY;
+                return t.getTime();
+            default:
+                return 0.0;
+        }
+    }
 }
