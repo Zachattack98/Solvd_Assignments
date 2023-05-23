@@ -4,8 +4,7 @@ import java.util.stream.Stream;
 
 public enum Time {
     FULLDAY,
-    HALFDAY,
-    ZERODAY;    //required only for List<Time> in ServiceShop
+    HALFDAY;
 
     double time;
 
@@ -24,10 +23,6 @@ public enum Time {
             default:
                 return 0.0;
         }
-    }
-
-    public static Stream<Time> stream() {
-        return Stream.of(Time.values());
     }
 
 }

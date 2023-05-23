@@ -16,8 +16,4 @@ public enum Name {
     public String getName() {
         return this.nameCompnt;
     }
-
-    public static Stream<Name> stream() {
-        return Stream.of(Name.values());
-    }
 }

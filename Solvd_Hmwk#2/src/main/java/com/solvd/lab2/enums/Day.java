@@ -17,7 +17,12 @@ public enum Day {
         this.dayName = dayName;
     }
 
-    public void halfOffDay(Function<Integer, Float> factor, int price) {
-        factor.apply(price);
+    public String getDayName() {
+        return dayName;
     }
+
+    public float halfOffDay(Function<Integer, Float> factor, int price) {
+        return factor.apply(price);
+    }
+
 }
