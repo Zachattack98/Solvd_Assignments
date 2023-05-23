@@ -68,7 +68,6 @@ public class AdapterUSB extends Component {
         Diagnostic diag = new Diagnostic();
         diag.result(nameComponent, statusOfComponent(dmg -> (dmg >= 0.0 & dmg <= 100.0)));
 
-        time = 0.5; //default time for repairing any component; half a day
         switch(numAdapters) {
             case(1):
                 price = 15;
@@ -93,20 +92,5 @@ public class AdapterUSB extends Component {
         }
 
         return price;
-    }
-
-    @Override
-    public double determineTime() {
-        Time t;
-        switch (statusOfComponent(dmg -> (dmg >= 0.0 & dmg <= 100.0))) {
-            case 1:
-                t = Time.FULLDAY;
-                return t.getTime();
-            case 2:
-                t = Time.HALFDAY;
-                return t.getTime();
-            default:
-                return 0.0;
-        }
     }
 }
