@@ -1,7 +1,6 @@
 package com.solvd.lab2;
 
 import com.solvd.lab2.enums.Time;
-import com.solvd.lab2.interfaces.ListComponent;
 import com.solvd.lab2.interfaces.NumberComponent;
 import com.solvd.lab2.exception.ComponentNotFoundException;
 import com.solvd.lab2.exception.DamageRangeInvalidException;
@@ -13,12 +12,14 @@ import org.apache.logging.log4j.Marker;
 import java.util.function.DoublePredicate;
 import java.util.function.IntConsumer;
 
-public abstract class Component implements ListComponent, NumberComponent {
+public abstract class Component implements NumberComponent {
     public String nameComponent; //component name
     protected double damage; //damage done to component
     protected int price; //price the component given its specifications
     protected double time; //number of days the repairs will take
     protected static int priceMultiplier = 2; //for replacement only; multiply the assigned price
+
+    DoublePredicate dp = (dmg) -> (dmg >= 0.0 & dmg <= 100.00);
 
     private static final Logger COMPONENT_LOGGER = LogManager.getLogger();
 
@@ -80,7 +81,7 @@ public abstract class Component implements ListComponent, NumberComponent {
     }
 
     //use damage is determine if the component is repairable, replaceable, or still working
-    public abstract int statusOfComponent(DoublePredicate dp);
+    public abstract int statusOfComponent();
 
     //return the price determined in each sub-class which will then be added together
     public abstract int determinePrice(IntConsumer intC);
@@ -89,7 +90,7 @@ public abstract class Component implements ListComponent, NumberComponent {
     public double determineTime() {
         Time t;
 
-        switch (statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0))) {
+        switch (statusOfComponent()) {
             case 1:
                 t = Time.FULLDAY;
                 return t.getTime();

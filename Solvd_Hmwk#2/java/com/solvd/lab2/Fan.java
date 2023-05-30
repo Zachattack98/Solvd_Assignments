@@ -38,7 +38,7 @@ public class Fan extends Component {
     }
 
     @Override
-    public int statusOfComponent(DoublePredicate dp) {
+    public int statusOfComponent() {
         //use DoublePredicate to test for valid damage results
 
         if(dp.test(damage)) { //if damage is between 0.0 and 100.0 test will return true
@@ -65,7 +65,7 @@ public class Fan extends Component {
     public int determinePrice(IntConsumer mul) {
         //output the diagnosis results of the cooling fan
         Diagnostic diag = new Diagnostic();
-        diag.result(nameComponent, statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0)));
+        diag.result(nameComponent, statusOfComponent());
 
         if(speed >= 0 && speed < 15) {
             price = 10;
@@ -80,15 +80,20 @@ public class Fan extends Component {
             price = 35;
         }
 
-        if(statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0)) == 2) {
+        if(statusOfComponent() == 2) {
             //create IntConsumer Instance then use accept method to get the price
             mul = p -> price *= priceMultiplier; //double the price if the cooling fan needs to be replaced
             mul.accept(price);
         }
-        else if (statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0)) == 3) {
+        else if (statusOfComponent() == 3) {
             price = 0; //no cost for a part that still works
         }
 
         return price;
+    }
+
+    @Override
+    public void printTestNumber() {
+        FAN_LOGGER.info("Diagnosis Test for Cooling Fan!");
     }
 }
