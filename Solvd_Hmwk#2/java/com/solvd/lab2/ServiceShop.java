@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Marker;
 import org.apache.logging.log4j.MarkerManager;
 
 import static com.solvd.lab2.Component.priceMultiplier;
-import static com.solvd.lab2.Diagnostic.printTestNumber;
 
 //cannot be overridden/modified by any subclasses
 public class ServiceShop {
@@ -118,11 +117,11 @@ public class ServiceShop {
 
             //if no errors occurred, begin diagnosis
             //First, price
-            component.determinePrice(p -> component.price *= priceMultiplier); //double the price if the cooling fan needs to be replaced
+            component.determinePrice(p -> component.price = p * priceMultiplier); //double the price if the cooling fan needs to be replaced
             totalPrice += component.price;
 
             //now that we have the status, add it to the list
-            lstStat.add(component.statusOfComponent((dmg) -> (dmg >= 0.0 & dmg <= 100.0)));
+            lstStat.add(component.statusOfComponent());
 
             //Second, time
             component.determineTime();
