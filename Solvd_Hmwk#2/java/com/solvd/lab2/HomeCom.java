@@ -8,17 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class HomeCom extends Computer implements InitDiagnosis {
-    private String hdecision;
+    public String hdecision;
 
     private static final Logger HOME_LOGGER = LogManager.getLogger(HomeCom.class);
-
-    public String getHdecision() {
-        return hdecision;
-    }
-
-    public void setHdecision(String hdecision) {
-        this.hdecision = hdecision;
-    }
 
     public HomeCom(double weight, int ramSize, int diskSize, String hdecision) throws ComputerNotFoundException {
         super(weight, ramSize, diskSize); //must be first statement in constructor

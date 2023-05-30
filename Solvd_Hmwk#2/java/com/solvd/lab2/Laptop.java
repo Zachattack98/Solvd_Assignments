@@ -8,17 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class Laptop extends Computer implements InitDiagnosis {
-    private String ldecision;
+    public String ldecision;
 
     private static final Logger LAPTOP_LOGGER = LogManager.getLogger(Laptop.class);
-
-    public String getLdecision() {
-        return ldecision;
-    }
-
-    public void setLdecision(String ldecision) {
-        this.ldecision = ldecision;
-    }
 
     public Laptop(double weight, int ramSize, int diskSize, String ldecision) throws ComputerNotFoundException {
         super(weight, ramSize, diskSize); //must be first statement in constructor

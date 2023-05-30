@@ -10,28 +10,17 @@ import org.apache.logging.log4j.Logger;
 
 public class Computer implements InitVerify {
     protected double weight;
-    private int ramSize;
-    private int diskSize;
-    public String power;
+    public int ramSize;
+    public int diskSize;
+    private String power;
 
     private static final Logger COMPUTER_LOGGER = LogManager.getLogger();
 
-
-    public int getRamSize() {
-        return ramSize;
+    public String getPower() {
+        return power;
     }
 
-    public void setRamSize(int ramSize) {
-        this.ramSize = ramSize;
-    }
-
-    public int getDiskSize() {
-        return diskSize;
-    }
-
-    public void setDiskSize(int diskSize) {
-        this.diskSize = diskSize;
-    }
+    public void setPower(String power) { this.power = power;}
 
     public Computer(double weight, int ramSize, int diskSize) throws ComputerNotFoundException {
         //if no viable computer is empty

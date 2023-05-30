@@ -38,14 +38,15 @@ public class ComputerRepairService{
 
         comp.powerOnOff();
 
-        if(comp.power.equals("No")) {
+        Laptop lap = new Laptop();
+        HomeCom home = new HomeCom();
+
+        if(comp.getPower().equals("No")) {
             //This way we'll only implement proceed() once
-            if(comp.weight < 5.0){
-                Laptop lap = new Laptop();
+            if(lap.weight < 5.0){
                 lap.proceed();
             }
-            else if(comp.weight >= 5.0 && comp.weight <= 10.0){
-                HomeCom home = new HomeCom();
+            else if(home.weight >= 5.0 && home.weight <= 10.0){
                 home.proceed();
             }
 
