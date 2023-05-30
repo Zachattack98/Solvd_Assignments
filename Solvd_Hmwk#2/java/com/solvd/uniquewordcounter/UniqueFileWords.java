@@ -1,8 +1,11 @@
-package com.solvd.lab2.uniquewordcounter;
+package com.solvd.uniquewordcounter;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -12,40 +15,35 @@ import org.apache.logging.log4j.Logger;
 
 public class UniqueFileWords {
 
-    static File fileList = new File("src/main/java/com/solvd/lab2/uniquewordcounter/listofnames.txt");
-    static File fileResult = new File("src/main/java/com/solvd/lab2/uniquewordcounter/result.txt");
+    private static final String FILE_PATH = "src/main/java/com/solvd/lab2/uniquewordcounter/TuringMachine.txt";
+    private static final String RESULT_PATH = "src/main/java/com/solvd/lab2/uniquewordcounter/result.txt";
 
-    String textList;
+    public static void uniqueList() throws IOException {
+        Logger fileLogger = LogManager.getLogger(UniqueFileWords.class);
+        File Read = FileUtils.getFile(FILE_PATH);
+        File Write = FileUtils.getFile(RESULT_PATH);
 
-    static UniqueFileWords unique = null;
-    private static final Logger fileLogger = LogManager.getLogger(UniqueFileWords.class);
+        try {
+            String contents = FileUtils.readFileToString(Read, StandardCharsets.UTF_8);
+            String[] allWords = StringUtils.split(contents, "[^a-zA-Z0-9']");
+            Set<String> uniqueWords = new HashSet<String>();
 
-    public UniqueFileWords(String textList) {
-        this.textList = textList;
-    }
 
-    public void uniqueList() throws IOException {
-        FileUtils.writeStringToFile(fileList, textList);
-        FileUtils.readFileToString(fileList, StandardCharsets.UTF_8.name());
-
-        String[] names = StringUtils.split(textList, ","); //spearate each word in text file by comma
-        int uniqueresult = 0;
-
-        for(int i=0; i < names.length; i++) {
-            //true if the word starts with *
-            if(StringUtils.startsWith(names[i], "*")){
-                uniqueresult++;
+            for (String word : allWords) {
+                uniqueWords.add(word);
             }
+
+            String toWrite = "Unique words found among text: " + uniqueWords.size() + "\n";
+
+            fileLogger.info(toWrite);
+            FileUtils.writeStringToFile(Write, toWrite, StandardCharsets.UTF_8, true);
+
+        } catch (IOException ioe) {
+            fileLogger.error(ioe.getMessage());
         }
-
-        FileUtils.writeStringToFile(fileResult, String.valueOf(uniqueresult), StandardCharsets.UTF_8.name());
-
-        fileLogger.info("Of the list of possible components: " + textList);
-        fileLogger.info("There is a total of " + uniqueresult + " unique names that we can test.");
     }
 
     public static void main(String[] args) throws IOException {
-        unique = new UniqueFileWords("*Screen, Motherboard, CPU, *HardDrive, Speakers, *USBAdapter, *PowerUnit, *Fan, Memory, DataStorage");
-        unique.uniqueList();
+        uniqueList();
     }
 }
